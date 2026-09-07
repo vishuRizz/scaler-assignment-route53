@@ -108,6 +108,7 @@ const ALIAS_OPTIONS: SelectProps.Option[] = [
 
 type RecordsTableProps = {
   records: DnsRecord[];
+  loading?: boolean;
   onRefresh: () => void;
   onCreate: () => void;
   onDeleteSelected?: (records: DnsRecord[]) => void;
@@ -115,6 +116,7 @@ type RecordsTableProps = {
 
 export function RecordsTable({
   records,
+  loading = false,
   onRefresh,
   onCreate,
   onDeleteSelected,
@@ -190,7 +192,8 @@ export function RecordsTable({
       columnDefinitions={COLUMN_DEFINITIONS}
       items={items}
       trackBy="id"
-      loadingText="Loading records"
+      loading={loading}
+      loadingText="Loading records. This can take a while if you have many records."
       header={
         <Header
           variant="h2"

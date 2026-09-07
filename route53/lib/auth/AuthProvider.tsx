@@ -93,10 +93,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       persistAuth(token, next);
       setSessionState(next);
-    } catch {
-      clearAuthStorage();
-      clearApiCache();
-      setSessionState(null);
+    } catch (err) {
+      // Only drop the session on auth failure — keep it across network/CORS blips.
+      if (err instanceof ApiError && err.status === 401) {
+        clearAuthStorage();
+        clearApiCache();
+        setSessionState(null);
+      }
     } finally {
       setReady(true);
     }

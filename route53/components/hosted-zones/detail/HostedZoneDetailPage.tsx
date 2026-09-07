@@ -36,6 +36,9 @@ export function HostedZoneDetailPage() {
     () => peekRecords(zoneId) ?? [],
   );
   const [ready, setReady] = useState(() => Boolean(peekHostedZone(zoneId)));
+  const [recordsLoading, setRecordsLoading] = useState(
+    () => !peekRecords(zoneId),
+  );
   const [showCreatedFlash, setShowCreatedFlash] = useState(false);
   const [showUpdatedFlash, setShowUpdatedFlash] = useState(false);
   const [showRecordCreatedFlash, setShowRecordCreatedFlash] = useState(false);
@@ -45,14 +48,21 @@ export function HostedZoneDetailPage() {
   const [actionError, setActionError] = useState<string | null>(null);
 
   const refresh = useCallback(
-    async (options?: { fresh?: boolean }) => {
-      const [nextZone, nextRecords] = await Promise.all([
-        getHostedZone(zoneId, { fresh: options?.fresh }),
-        listRecords(zoneId, { fresh: options?.fresh }),
-      ]);
-      setZone(nextZone);
-      setRecords(nextZone ? nextRecords : []);
-      return nextZone;
+    async (options?: { fresh?: boolean; showLoading?: boolean }) => {
+      if (options?.showLoading || !peekRecords(zoneId)) {
+        setRecordsLoading(true);
+      }
+      try {
+        const [nextZone, nextRecords] = await Promise.all([
+          getHostedZone(zoneId, { fresh: options?.fresh }),
+          listRecords(zoneId, { fresh: options?.fresh }),
+        ]);
+        setZone(nextZone);
+        setRecords(nextZone ? nextRecords : []);
+        return nextZone;
+      } finally {
+        setRecordsLoading(false);
+      }
     },
     [zoneId],
   );
@@ -65,17 +75,26 @@ export function HostedZoneDetailPage() {
       setZone(cachedZone);
       setRecords(cachedRecords ?? []);
       setReady(true);
+      if (cachedRecords) setRecordsLoading(false);
+    } else {
+      setRecordsLoading(true);
     }
 
     void (async () => {
       try {
-        const nextZone = await refresh({ fresh: Boolean(cachedZone) });
+        const nextZone = await refresh({
+          fresh: Boolean(cachedZone),
+          showLoading: !cachedRecords,
+        });
         if (cancelled) return;
         if (!nextZone && !cachedZone) setZone(null);
       } catch {
         if (!cancelled && !peekHostedZone(zoneId)) setZone(null);
       } finally {
-        if (!cancelled) setReady(true);
+        if (!cancelled) {
+          setReady(true);
+          setRecordsLoading(false);
+        }
       }
     })();
 
@@ -221,7 +240,10 @@ export function HostedZoneDetailPage() {
               content: (
                 <RecordsTable
                   records={records}
-                  onRefresh={() => void refresh({ fresh: true })}
+                  loading={recordsLoading}
+                  onRefresh={() =>
+                    void refresh({ fresh: true, showLoading: true })
+                  }
                   onCreate={() =>
                     router.push(`/hosted-zones/${zone.id}/records/create`)
                   }

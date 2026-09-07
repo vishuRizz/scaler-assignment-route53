@@ -77,6 +77,7 @@ type HostedZonesTableProps = {
   selectedItems: HostedZone[];
   onSelectionChange: (items: HostedZone[]) => void;
   onCreate: () => void;
+  loading?: boolean;
 };
 
 /**
@@ -87,6 +88,7 @@ export function HostedZonesTable({
   selectedItems,
   onSelectionChange,
   onCreate,
+  loading = false,
 }: HostedZonesTableProps) {
   const [preferences, setPreferences] =
     useState<CollectionPreferencesProps.Preferences>({ pageSize: 20 });
@@ -131,7 +133,8 @@ export function HostedZonesTable({
       }
       columnDefinitions={COLUMN_DEFINITIONS}
       items={collectionItems}
-      loadingText="Loading hosted zones"
+      loading={loading}
+      loadingText="Loading hosted zones. This can take a while if you have many hosted zones."
       trackBy="id"
       empty={<HostedZonesEmptyState onCreate={onCreate} />}
       filter={

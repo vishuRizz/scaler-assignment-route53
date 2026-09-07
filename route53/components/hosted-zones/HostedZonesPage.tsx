@@ -127,6 +127,7 @@ export function HostedZonesPage() {
             hasSelection={hasSingleSelection}
             onRefresh={() => {
               void (async () => {
+                setLoading(true);
                 try {
                   const data = await listHostedZones({ fresh: true });
                   setZones(data);
@@ -137,6 +138,8 @@ export function HostedZonesPage() {
                       ? err.message
                       : "Failed to load hosted zones.",
                   );
+                } finally {
+                  setLoading(false);
                 }
               })();
             }}
@@ -158,7 +161,6 @@ export function HostedZonesPage() {
             <Link href="#" fontSize="body-s">
               To change modes go to settings.
             </Link>
-            {loading && zones.length === 0 ? " Loading…" : null}
           </p>
         </div>
 
@@ -167,6 +169,7 @@ export function HostedZonesPage() {
           selectedItems={selectedItems}
           onSelectionChange={setSelectedItems}
           onCreate={goCreate}
+          loading={loading}
         />
       </div>
 
