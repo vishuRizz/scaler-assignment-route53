@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   forwardRef,
@@ -94,6 +93,25 @@ function SearchGlyph() {
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/** White Q mark used inside the search field (Console inspect path). */
+function AmazonQGlyph({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M18.2199 7.40941L12.8699 4.31846C12.6299 4.17842 12.3199 4.1084 11.9999 4.1084C11.6799 4.1084 11.3699 4.17842 11.1299 4.31846L5.77991 7.40941C5.29991 7.67949 4.90991 8.3597 4.90991 8.90986V15.0917C4.90991 15.6419 5.29991 16.3121 5.77991 16.5922L11.1399 19.6832C11.3799 19.8232 11.6899 19.8932 12.0099 19.8932C12.3299 19.8932 12.6399 19.8232 12.8799 19.6832L18.2399 16.5922C18.7199 16.3121 19.1099 15.6419 19.1099 15.0917V8.90986C19.1099 8.3597 18.7199 7.67949 18.2399 7.40941H18.2199ZM11.9999 17.8826L6.90991 14.9417V9.05991L11.9999 6.11901L17.0899 9.05991V13.7813L13.9999 12.0008V11.2606C13.9999 11.0005 13.8599 10.7704 13.6399 10.6404L12.3599 9.90017C12.2499 9.84015 12.1199 9.80013 11.9999 9.80013C11.8799 9.80013 11.7499 9.83014 11.6399 9.90017L10.3599 10.6404C10.1399 10.7704 9.99991 11.0105 9.99991 11.2606V12.741C9.99991 13.0011 10.1399 13.2312 10.3599 13.3612L11.6399 14.1014C11.7499 14.1615 11.8799 14.2015 11.9999 14.2015C12.1199 14.2015 12.2499 14.1715 12.3599 14.1014L12.9999 13.7313L16.0899 15.5119L11.9999 17.8726V17.8826Z"
       />
     </svg>
   );
@@ -218,40 +236,19 @@ export const ConsoleSearch = forwardRef<ConsoleSearchHandle, ConsoleSearchProps>
           onFocus={() => setOpen(true)}
           onKeyDown={onInputKeyDown}
         />
-        {open ? (
-          <button
-            type="button"
-            className={styles.askQ}
-            aria-label="Ask Amazon Q"
-            onClick={() => {
-              setAmazonQOpen(true);
-              setOpen(false);
-            }}
-          >
-            <Image
-              src="/assets/amazon-q.svg"
-              alt=""
-              width={16}
-              height={16}
-              aria-hidden
-            />
-            Ask Amazon Q
-          </button>
-        ) : (
-          <>
-            <span className={styles.shortcut}>[Option+S]</span>
-            <button
-              type="button"
-              className={styles.historyButton}
-              aria-label="Search history"
-            >
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-                <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM2.5 8a5.5 5.5 0 1111 0 5.5 5.5 0 01-11 0z" />
-                <path d="M8 4.25a.75.75 0 01.75.75v2.69l1.78 1.78a.75.75 0 11-1.06 1.06l-2-2A.75.75 0 017.25 8V5A.75.75 0 018 4.25z" />
-              </svg>
-            </button>
-          </>
-        )}
+        {!open ? <span className={styles.shortcut}>[Option+S]</span> : null}
+        <button
+          type="button"
+          className={styles.askQ}
+          aria-label="Ask Amazon Q"
+          onClick={() => {
+            setAmazonQOpen(true);
+            setOpen(false);
+          }}
+        >
+          <AmazonQGlyph size={14} />
+          Ask Amazon Q
+        </button>
         {open ? (
           <button
             type="button"

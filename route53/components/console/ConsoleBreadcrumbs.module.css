@@ -27,7 +27,7 @@
 
 .separator {
   margin: 0 8px;
-  color: #5f6b7a;
+  color: var(--aws-text-secondary);
   font-size: 14px;
   line-height: 1;
   flex-shrink: 0;
@@ -38,7 +38,7 @@
   background: none;
   padding: 0;
   margin: 0;
-  color: #0972d3;
+  color: var(--aws-link);
   font-size: 14px;
   line-height: 20px;
   cursor: pointer;
@@ -49,11 +49,11 @@
 }
 
 .link:hover {
-  color: #033d8b;
+  color: var(--aws-link-hover);
 }
 
 .current {
-  color: #0f141a;
+  color: var(--aws-text);
   font-size: 14px;
   line-height: 20px;
   white-space: nowrap;

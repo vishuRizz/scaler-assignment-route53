@@ -45,6 +45,8 @@ function applyDocumentTheme(mode: VisualMode) {
   const dark = resolveDark(mode);
   document.documentElement.dataset.visualMode = dark ? "dark" : "light";
   document.documentElement.style.colorScheme = dark ? "dark" : "light";
+  // Cloudscape tokens hang off body; class must be present for its dark palette.
+  document.body.classList.toggle("awsui-dark-mode", dark);
   applyMode(dark ? Mode.Dark : Mode.Light);
 }
 

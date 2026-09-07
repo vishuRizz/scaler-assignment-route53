@@ -53,6 +53,38 @@ html[data-visual-mode="dark"] {
   --aws-surface-secondary: #1b232d;
 }
 
+/*
+ * Cloudscape defines design tokens on `body` (inside @layer). Setting them only on
+ * `html[data-visual-mode]` does not win for descendants — body redefines them.
+ * Unlayered body overrides keep headings/links readable in dark mode.
+ */
+html[data-visual-mode="dark"] body {
+  --color-text-heading-default-pn83b8: #ebebf0;
+  --color-text-heading-secondary-su1acg: #a4a4ad;
+  --color-text-body-default-gtm97i: #c6c6cd;
+  --color-text-body-secondary-y6dr4d: #c6c6cd;
+  --color-text-counter-q4zq3v: #a4a4ad;
+  --color-text-form-default-jsw02x: #dedee3;
+  --color-text-form-secondary-t0glp7: #a4a4ad;
+  --color-text-group-label-0wronh: #c6c6cd;
+  --color-text-column-header-wyzs6v: #b4b4bb;
+  --color-text-empty-68xc4n: #dedee3;
+  --color-text-link-default-rhby5q: #42b4ff;
+  --color-text-link-hover-br6snu: #75cfff;
+  --color-text-button-normal-default-t865au: #42b4ff;
+  --color-text-button-normal-hover-20c0ob: #75cfff;
+  --color-text-interactive-default-1o1pl2: #dedee3;
+  --color-text-interactive-hover-j5y3wx: #f9f9fa;
+  --color-text-interactive-active-fedaa8: #f9f9fa;
+  --color-text-breadcrumb-current-mmrid5: #8c8c94;
+  --color-background-container-content-78ljyf: #151d26;
+  --color-background-container-header-ydavso: #151d26;
+  --color-background-layout-main-7z8vaj: #131920;
+  --color-background-input-default-bz9w07: #151d26;
+  --color-background-table-header-unjmda: #151d26;
+  --color-border-divider-default-0de9c8: #2a3441;
+}
+
 html,
 body {
   height: 100%;

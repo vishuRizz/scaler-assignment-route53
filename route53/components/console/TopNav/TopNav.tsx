@@ -285,8 +285,8 @@ export function TopNav() {
             className={styles.qIcon}
             src="/assets/amazon-q.svg"
             alt=""
-            width={28}
-            height={28}
+            width={24}
+            height={24}
             aria-hidden
           />
         </button>

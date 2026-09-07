@@ -1,8 +1,8 @@
 .topNav {
   display: flex;
   align-items: center;
-  height: 48px;
-  padding: 0 12px 0 4px;
+  height: 52px;
+  padding: 2px 14px 2px 6px;
   background: var(--aws-header-bg);
   color: #f1f3f3;
   flex-shrink: 0;
@@ -10,6 +10,24 @@
   gap: 0;
   overflow: visible;
   position: relative;
+  border-bottom: 1px solid #232f3e;
+}
+
+:global(html[data-visual-mode="dark"]) .topNav {
+  border-bottom-color: #2a3441;
+}
+
+/* AWS console accent bar — same #7d8998 as the account tab so they fuse */
+.topNav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #7d8998;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .left {
@@ -23,7 +41,7 @@
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-width: 0;
   padding: 0 12px 0 12px;
 }
@@ -84,8 +102,8 @@
 
 .qIcon {
   display: block;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
 }
 
 .iconButton {
@@ -294,8 +312,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 24px;
-  padding: 0 10px;
+  height: 26px;
+  margin-top: 0;
+  padding: 3px 10px 0;
   border: none;
   border-radius: 0 0 8px 8px;
   background: #7d8998;
@@ -306,6 +325,8 @@
   font-weight: 700;
   white-space: nowrap;
   line-height: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .accountPill:hover,
@@ -374,8 +395,8 @@
 
 @media (max-width: 767px) {
   .topNav {
-    height: 48px;
-    padding: 0 4px 0 2px;
+    height: 52px;
+    padding: 2px 6px 2px 4px;
   }
 
   .center {
@@ -415,8 +436,8 @@
   }
 
   .qIcon {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 
   .iconButton {
