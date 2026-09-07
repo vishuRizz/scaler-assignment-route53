@@ -11,6 +11,7 @@ type Step = "identify" | "password" | "register";
 
 /**
  * AWS Management Console sign-in — light layout with Lightsail promo panel.
+ * Empty Sign in / Sign up uses seeded demo credentials for evaluators.
  */
 export function SignInPage() {
   const router = useRouter();
@@ -18,13 +19,14 @@ export function SignInPage() {
 
   const [method, setMethod] = useState<AuthMethod>("root");
   const [step, setStep] = useState<Step>("identify");
-  const [email, setEmail] = useState<string>(DEMO_CREDENTIALS.email);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [accountId, setAccountId] = useState<string>(DEMO_CREDENTIALS.accountId);
-  const [iamUser, setIamUser] = useState<string>(DEMO_CREDENTIALS.displayName);
+  const [accountId, setAccountId] = useState("");
+  const [iamUser, setIamUser] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
 
   useEffect(() => {
     if (ready && session) {
@@ -34,11 +36,33 @@ export function SignInPage() {
 
   const goConsole = () => router.replace("/hosted-zones");
 
+  const signInAsGuest = async () => {
+    setError(null);
+    setGuestLoading(true);
+    setBusy(true);
+    setEmail(DEMO_CREDENTIALS.email);
+    setAccountId(DEMO_CREDENTIALS.accountId);
+    setIamUser(DEMO_CREDENTIALS.displayName);
+    try {
+      await new Promise((resolve) => window.setTimeout(resolve, 700));
+      await signInRoot(DEMO_CREDENTIALS.email, DEMO_CREDENTIALS.password);
+      goConsole();
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Guest sign-in failed. Ensure the demo user is seeded.",
+      );
+      setGuestLoading(false);
+      setBusy(false);
+    }
+  };
+
   const handleRootNext = (event: FormEvent) => {
     event.preventDefault();
     setError(null);
     if (!email.trim()) {
-      setError("Enter your root user email address.");
+      void signInAsGuest();
       return;
     }
     setStep("password");
@@ -47,13 +71,16 @@ export function SignInPage() {
   const handleRootSignIn = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+    if (!password.trim()) {
+      void signInAsGuest();
+      return;
+    }
     setBusy(true);
     try {
       await signInRoot(email, password);
       goConsole();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign in failed.");
-    } finally {
       setBusy(false);
     }
   };
@@ -61,13 +88,16 @@ export function SignInPage() {
   const handleIamSignIn = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+    if (!accountId.trim() || !iamUser.trim() || !password.trim()) {
+      void signInAsGuest();
+      return;
+    }
     setBusy(true);
     try {
       await signInIam(accountId, iamUser, password);
       goConsole();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign in failed.");
-    } finally {
       setBusy(false);
     }
   };
@@ -75,6 +105,10 @@ export function SignInPage() {
   const handleRegister = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+    if (!email.trim() || !password.trim()) {
+      void signInAsGuest();
+      return;
+    }
     setBusy(true);
     try {
       await register({
@@ -85,7 +119,6 @@ export function SignInPage() {
       goConsole();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not create account.");
-    } finally {
       setBusy(false);
     }
   };
@@ -94,6 +127,22 @@ export function SignInPage() {
     return (
       <div className={styles.page}>
         <p className={styles.loading}>Loading...</p>
+      </div>
+    );
+  }
+
+  if (guestLoading) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.guestLoading} role="status" aria-live="polite">
+          <div className={styles.guestSpinner} aria-hidden />
+          <p className={styles.guestTitle}>
+            Signing in with mock credentials for guest…
+          </p>
+          <p className={styles.guestHint}>
+            {DEMO_CREDENTIALS.email} · account {DEMO_CREDENTIALS.accountId}
+          </p>
+        </div>
       </div>
     );
   }
@@ -133,7 +182,8 @@ export function SignInPage() {
               <form onSubmit={handleRegister}>
                 <h1 className={styles.title}>Create account</h1>
                 <p className={styles.subtitle}>
-                  Create an account to use this Route 53 console clone.
+                  Leave fields blank to continue as a guest with demo
+                  credentials.
                 </p>
                 {error ? <p className={styles.error}>{error}</p> : null}
                 <div className={styles.field}>
@@ -205,7 +255,8 @@ export function SignInPage() {
               >
                 <h1 className={styles.title}>Sign In</h1>
                 <p className={styles.subtitle}>
-                  Access your AWS account by user type.
+                  Access your AWS account by user type. Leave fields blank to
+                  continue as a guest.
                 </p>
                 {error ? <p className={styles.error}>{error}</p> : null}
 
@@ -284,7 +335,11 @@ export function SignInPage() {
                         placeholder="username@example.com"
                       />
                     </div>
-                    <button type="submit" className={styles.primaryButton}>
+                    <button
+                      type="submit"
+                      className={styles.primaryButton}
+                      disabled={busy}
+                    >
                       Next
                     </button>
                   </>
@@ -299,6 +354,7 @@ export function SignInPage() {
                         className={styles.input}
                         value={accountId}
                         onChange={(e) => setAccountId(e.target.value)}
+                        placeholder={DEMO_CREDENTIALS.accountId}
                       />
                     </div>
                     <div className={styles.field}>
@@ -311,6 +367,7 @@ export function SignInPage() {
                         value={iamUser}
                         onChange={(e) => setIamUser(e.target.value)}
                         autoComplete="username"
+                        placeholder={DEMO_CREDENTIALS.displayName}
                       />
                     </div>
                     <div className={styles.field}>
@@ -342,7 +399,16 @@ export function SignInPage() {
                 <button
                   type="button"
                   className={styles.secondaryButton}
+                  disabled={busy}
                   onClick={() => {
+                    if (
+                      !email.trim() &&
+                      !password.trim() &&
+                      !displayName.trim()
+                    ) {
+                      void signInAsGuest();
+                      return;
+                    }
                     setStep("register");
                     setPassword("");
                     setError(null);
@@ -401,6 +467,7 @@ export function SignInPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoFocus
+                    placeholder="Leave blank for guest demo"
                   />
                 </div>
                 <button

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import { CONSOLE_ACCOUNT } from "@/lib/constants/console";
 import { useAuth } from "@/lib/auth/AuthProvider";
@@ -228,7 +229,7 @@ export function TopNav() {
   return (
     <header className={styles.topNav} role="banner">
       <div className={styles.left}>
-        <a href="/" className={styles.logoLink} aria-label="Amazon Web Services">
+        <Link href="/" className={styles.logoLink} aria-label="Amazon Web Services">
           <Image
             className={styles.logoImage}
             src="/assets/aws-logo.svg"
@@ -237,7 +238,7 @@ export function TopNav() {
             height={20}
             priority
           />
-        </a>
+        </Link>
 
         <Divider />
 
