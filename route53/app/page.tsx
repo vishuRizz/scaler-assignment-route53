@@ -7,6 +7,9 @@ export const metadata: Metadata = {
     "A reliable and cost-effective way to route end users to Internet applications",
 };
 
+/**
+ * App entry: `/` → LandingPage → marketing UI.
+ */
 export default function HomePage() {
   return <LandingPage />;
 }

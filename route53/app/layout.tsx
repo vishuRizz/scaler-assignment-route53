@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full">
-      <body className="h-full">
+    <html lang="en" style={{ minHeight: "100%" }}>
+      <body style={{ minHeight: "100%", overflowY: "auto" }}>
         <CloudscapeTheme>
           <AuthProvider>{children}</AuthProvider>
         </CloudscapeTheme>
