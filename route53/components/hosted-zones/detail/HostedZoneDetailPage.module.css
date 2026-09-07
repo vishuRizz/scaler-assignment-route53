@@ -17,13 +17,22 @@
 .titleBlock {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
+  align-items: baseline;
+  gap: 8px;
   min-width: 0;
 }
 
-.titleBlock :global(h1) {
+.zoneTitle {
   margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0f141a;
+  letter-spacing: -0.01em;
+}
+
+.infoLink {
+  align-self: baseline;
 }
 
 .detailValue {

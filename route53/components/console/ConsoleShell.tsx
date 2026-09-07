@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { RequireAuth } from "@/components/auth/RequireAuth";
 import { BreadcrumbStrip } from "@/components/console/BreadcrumbStrip/BreadcrumbStrip";
 import { ConsoleFooter } from "@/components/console/ConsoleFooter/ConsoleFooter";
 import { Route53SideNav } from "@/components/console/side-navigation/Route53SideNav";
@@ -61,7 +62,8 @@ export function ConsoleShell({
   const closeNav = () => setNavigationOpen(false);
 
   return (
-    <div className={styles.shell}>
+    <RequireAuth>
+      <div className={styles.shell}>
       <TopNav />
 
       <BreadcrumbStrip
@@ -132,5 +134,6 @@ export function ConsoleShell({
         <ConsoleFooter />
       </div>
     </div>
+    </RequireAuth>
   );
 }

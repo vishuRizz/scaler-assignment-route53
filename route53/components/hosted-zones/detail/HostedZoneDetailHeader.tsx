@@ -2,7 +2,6 @@
 
 import Badge from "@cloudscape-design/components/badge";
 import Button from "@cloudscape-design/components/button";
-import Header from "@cloudscape-design/components/header";
 import Link from "@cloudscape-design/components/link";
 import SpaceBetween from "@cloudscape-design/components/space-between";
 import type { HostedZone } from "@/lib/types/hosted-zone";
@@ -17,16 +16,10 @@ export function HostedZoneDetailHeader({ zone }: HostedZoneDetailHeaderProps) {
     <div className={styles.headerRow}>
       <div className={styles.titleBlock}>
         <Badge color="blue">{zone.type}</Badge>
-        <Header
-          variant="h1"
-          info={
-            <Link href="#" fontSize="body-s">
-              Info
-            </Link>
-          }
-        >
-          {zone.name}
-        </Header>
+        <h1 className={styles.zoneTitle}>{zone.name}</h1>
+        <Link href="#" fontSize="body-s" className={styles.infoLink}>
+          Info
+        </Link>
       </div>
       <SpaceBetween direction="horizontal" size="xs">
         <Button>Delete zone</Button>

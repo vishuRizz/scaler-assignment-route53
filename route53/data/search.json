@@ -1,0 +1,1099 @@
+{
+    "services": [
+      {
+        "id": "svc-route53",
+        "title": "Route 53",
+        "description": "Scalable Domain Name System (DNS) web service",
+        "category": "service",
+        "service": "Route 53",
+        "icon": "Globe",
+        "href": "/route53/hosted-zones"
+      },
+      {
+        "id": "svc-ec2",
+        "title": "EC2",
+        "description": "Secure and resizable compute capacity in the cloud",
+        "category": "service",
+        "service": "EC2",
+        "icon": "Server",
+        "href": "/ec2"
+      },
+      {
+        "id": "svc-s3",
+        "title": "S3",
+        "description": "Object storage built to retrieve any amount of data",
+        "category": "service",
+        "service": "S3",
+        "icon": "Database",
+        "href": "/s3"
+      },
+      {
+        "id": "svc-lambda",
+        "title": "Lambda",
+        "description": "Run code without thinking about servers",
+        "category": "service",
+        "service": "Lambda",
+        "icon": "Zap",
+        "href": "/lambda"
+      },
+      {
+        "id": "svc-vpc",
+        "title": "VPC",
+        "description": "Isolated cloud resources and networking",
+        "category": "service",
+        "service": "VPC",
+        "icon": "Network",
+        "href": "/vpc"
+      },
+      {
+        "id": "svc-cloudfront",
+        "title": "CloudFront",
+        "description": "Fast, highly secure and programmable content delivery network",
+        "category": "service",
+        "service": "CloudFront",
+        "icon": "Cloud",
+        "href": "/cloudfront"
+      },
+      {
+        "id": "svc-api-gateway",
+        "title": "API Gateway",
+        "description": "Create, publish, maintain, monitor, and secure APIs",
+        "category": "service",
+        "service": "API Gateway",
+        "icon": "Webhook",
+        "href": "/api-gateway"
+      },
+      {
+        "id": "svc-dynamodb",
+        "title": "DynamoDB",
+        "description": "Fast and flexible NoSQL database service",
+        "category": "service",
+        "service": "DynamoDB",
+        "icon": "Table",
+        "href": "/dynamodb"
+      },
+      {
+        "id": "svc-rds",
+        "title": "RDS",
+        "description": "Managed relational database service",
+        "category": "service",
+        "service": "RDS",
+        "icon": "Database",
+        "href": "/rds"
+      },
+      {
+        "id": "svc-ecs",
+        "title": "ECS",
+        "description": "Highly secure, reliable, and scalable container management",
+        "category": "service",
+        "service": "ECS",
+        "icon": "Container",
+        "href": "/ecs"
+      },
+      {
+        "id": "svc-eks",
+        "title": "EKS",
+        "description": "Managed Kubernetes service",
+        "category": "service",
+        "service": "EKS",
+        "icon": "Boxes",
+        "href": "/eks"
+      },
+      {
+        "id": "svc-fargate",
+        "title": "Fargate",
+        "description": "Serverless compute for containers",
+        "category": "service",
+        "service": "Fargate",
+        "icon": "Box",
+        "href": "/fargate"
+      },
+      {
+        "id": "svc-elastic-beanstalk",
+        "title": "Elastic Beanstalk",
+        "description": "Easy-to-use service for deploying and scaling web applications",
+        "category": "service",
+        "service": "Elastic Beanstalk",
+        "icon": "Layers",
+        "href": "/elastic-beanstalk"
+      },
+      {
+        "id": "svc-lightsail",
+        "title": "Lightsail",
+        "description": "Easy-to-use cloud platform for simple applications",
+        "category": "service",
+        "service": "Lightsail",
+        "icon": "Lightbulb",
+        "href": "/lightsail"
+      },
+      {
+        "id": "svc-elb",
+        "title": "Elastic Load Balancing",
+        "description": "Automatically distribute incoming application traffic",
+        "category": "service",
+        "service": "Elastic Load Balancing",
+        "icon": "GitBranch",
+        "href": "/elb"
+      },
+      {
+        "id": "svc-direct-connect",
+        "title": "Direct Connect",
+        "description": "Dedicated network connection to AWS",
+        "category": "service",
+        "service": "Direct Connect",
+        "icon": "Cable",
+        "href": "/direct-connect"
+      },
+      {
+        "id": "svc-transit-gateway",
+        "title": "Transit Gateway",
+        "description": "Connect VPCs and on-premises networks through a central hub",
+        "category": "service",
+        "service": "Transit Gateway",
+        "icon": "Network",
+        "href": "/transit-gateway"
+      },
+      {
+        "id": "svc-iam",
+        "title": "IAM",
+        "description": "Securely manage access to AWS resources",
+        "category": "service",
+        "service": "IAM",
+        "icon": "Shield",
+        "href": "/iam"
+      },
+      {
+        "id": "svc-cognito",
+        "title": "Cognito",
+        "description": "Authentication and authorization for web and mobile applications",
+        "category": "service",
+        "service": "Cognito",
+        "icon": "Users",
+        "href": "/cognito"
+      },
+      {
+        "id": "svc-kms",
+        "title": "Key Management Service",
+        "description": "Create and control cryptographic keys",
+        "category": "service",
+        "service": "KMS",
+        "icon": "KeyRound",
+        "href": "/kms"
+      },
+      {
+        "id": "svc-waf",
+        "title": "WAF",
+        "description": "Web application firewall",
+        "category": "service",
+        "service": "WAF",
+        "icon": "ShieldCheck",
+        "href": "/waf"
+      },
+      {
+        "id": "svc-shield",
+        "title": "Shield",
+        "description": "Managed DDoS protection",
+        "category": "service",
+        "service": "Shield",
+        "icon": "Shield",
+        "href": "/shield"
+      },
+      {
+        "id": "svc-cloudwatch",
+        "title": "CloudWatch",
+        "description": "Monitor applications, infrastructure, and services",
+        "category": "service",
+        "service": "CloudWatch",
+        "icon": "Activity",
+        "href": "/cloudwatch"
+      },
+      {
+        "id": "svc-cloudtrail",
+        "title": "CloudTrail",
+        "description": "Track user activity and API usage",
+        "category": "service",
+        "service": "CloudTrail",
+        "icon": "FileSearch",
+        "href": "/cloudtrail"
+      },
+      {
+        "id": "svc-cloudformation",
+        "title": "CloudFormation",
+        "description": "Infrastructure as code for AWS",
+        "category": "service",
+        "service": "CloudFormation",
+        "icon": "Layers",
+        "href": "/cloudformation"
+      },
+      {
+        "id": "svc-sqs",
+        "title": "SQS",
+        "description": "Fully managed message queuing service",
+        "category": "service",
+        "service": "SQS",
+        "icon": "MessageSquare",
+        "href": "/sqs"
+      },
+      {
+        "id": "svc-sns",
+        "title": "SNS",
+        "description": "Pub/sub messaging service",
+        "category": "service",
+        "service": "SNS",
+        "icon": "Bell",
+        "href": "/sns"
+      },
+      {
+        "id": "svc-eventbridge",
+        "title": "EventBridge",
+        "description": "Serverless event bus service",
+        "category": "service",
+        "service": "EventBridge",
+        "icon": "Radio",
+        "href": "/eventbridge"
+      },
+      {
+        "id": "svc-secrets-manager",
+        "title": "Secrets Manager",
+        "description": "Protect and manage secrets used to access applications and services",
+        "category": "service",
+        "service": "Secrets Manager",
+        "icon": "LockKeyhole",
+        "href": "/secrets-manager"
+      },
+      {
+        "id": "svc-acm",
+        "title": "Certificate Manager",
+        "description": "Provision and manage SSL/TLS certificates",
+        "category": "service",
+        "service": "Certificate Manager",
+        "icon": "BadgeCheck",
+        "href": "/certificate-manager"
+      },
+      {
+        "id": "svc-bedrock",
+        "title": "Bedrock",
+        "description": "Build and scale generative AI applications",
+        "category": "service",
+        "service": "Bedrock",
+        "icon": "Sparkles",
+        "href": "/bedrock"
+      },
+      {
+        "id": "svc-sagemaker",
+        "title": "SageMaker",
+        "description": "Build, train, and deploy machine learning models",
+        "category": "service",
+        "service": "SageMaker",
+        "icon": "Brain",
+        "href": "/sagemaker"
+      }
+    ],
+    "features": [
+      {
+        "id": "feat-hosted-zones",
+        "title": "Hosted zones",
+        "description": "Manage your Route 53 hosted zones",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Globe",
+        "href": "/route53/hosted-zones"
+      },
+      {
+        "id": "feat-dns-records",
+        "title": "DNS records",
+        "description": "Create and manage DNS resource records",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "List",
+        "href": "/route53/hosted-zones"
+      },
+      {
+        "id": "feat-health-checks",
+        "title": "Health checks",
+        "description": "Monitor the health of your endpoints",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "HeartPulse",
+        "href": "/route53/health-checks"
+      },
+      {
+        "id": "feat-traffic-policies",
+        "title": "Traffic policies",
+        "description": "Manage traffic policies for DNS routing",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "GitBranch",
+        "href": "/route53/traffic-policies"
+      },
+      {
+        "id": "feat-traffic-flow",
+        "title": "Traffic Flow",
+        "description": "Create complex traffic routing configurations",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Workflow",
+        "href": "/route53/traffic-flow"
+      },
+      {
+        "id": "feat-resolver",
+        "title": "Resolver",
+        "description": "DNS resolution for hybrid cloud environments",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Network",
+        "href": "/route53/resolver"
+      },
+      {
+        "id": "feat-resolver-endpoints",
+        "title": "Resolver endpoints",
+        "description": "Configure inbound and outbound DNS endpoints",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Plug",
+        "href": "/route53/resolver/endpoints"
+      },
+      {
+        "id": "feat-vpc-resolver",
+        "title": "VPC Resolver",
+        "description": "DNS resolution within Amazon VPC",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Network",
+        "href": "/route53/resolver"
+      },
+      {
+        "id": "feat-private-hosted-zones",
+        "title": "Private hosted zones",
+        "description": "Host DNS information for domains within one or more VPCs",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Lock",
+        "href": "/route53/hosted-zones"
+      },
+      {
+        "id": "feat-public-hosted-zones",
+        "title": "Public hosted zones",
+        "description": "Host DNS records for domains accessible on the internet",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Globe",
+        "href": "/route53/hosted-zones"
+      },
+      {
+        "id": "feat-routing-policies",
+        "title": "Routing policies",
+        "description": "Control how Route 53 responds to DNS queries",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Route",
+        "href": "/route53/hosted-zones"
+      },
+      {
+        "id": "feat-alias-records",
+        "title": "Alias records",
+        "description": "Route traffic to selected AWS resources",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "ArrowRight",
+        "href": "/route53/hosted-zones"
+      },
+      {
+        "id": "feat-dnssec",
+        "title": "DNSSEC signing",
+        "description": "Protect DNS responses with DNSSEC",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "ShieldCheck",
+        "href": "/route53/dnssec"
+      },
+      {
+        "id": "feat-domain-registration",
+        "title": "Domain registration",
+        "description": "Register and manage domain names",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Globe2",
+        "href": "/route53/domains"
+      },
+      {
+        "id": "feat-registered-domains",
+        "title": "Registered domains",
+        "description": "Manage domains registered through Route 53",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Globe2",
+        "href": "/route53/domains"
+      },
+      {
+        "id": "feat-cidr",
+        "title": "CIDR collections",
+        "description": "Manage IP-based routing collections",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Network",
+        "href": "/route53/cidr"
+      },
+      {
+        "id": "feat-ip-routing",
+        "title": "IP-based routing",
+        "description": "Route DNS traffic based on client IP address",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "MapPin",
+        "href": "/route53/ip-routing"
+      },
+      {
+        "id": "feat-global-resolver",
+        "title": "Global Resolver",
+        "description": "Manage global DNS resolver configurations",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Globe",
+        "href": "/route53/resolver"
+      },
+      {
+        "id": "feat-shared-dns-views",
+        "title": "Shared DNS views",
+        "description": "Share DNS views across accounts and VPCs",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "Share2",
+        "href": "/route53/resolver"
+      },
+      {
+        "id": "feat-query-logging",
+        "title": "Query logging",
+        "description": "Log DNS queries for monitoring and troubleshooting",
+        "category": "feature",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/route53/resolver/query-logging"
+      }
+    ],
+    "documents": [
+      {
+        "id": "doc-r53-getting-started",
+        "title": "Getting started with Amazon Route 53",
+        "description": "Learn the basics of Amazon Route 53 and DNS management",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/getting-started"
+      },
+      {
+        "id": "doc-r53-hosted-zones",
+        "title": "Working with hosted zones",
+        "description": "Learn how to create, list, edit, and delete hosted zones",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/hosted-zones"
+      },
+      {
+        "id": "doc-r53-create-public-zone",
+        "title": "Creating a public hosted zone",
+        "description": "Create a hosted zone for a domain on the internet",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/create-public-zone"
+      },
+      {
+        "id": "doc-r53-private-zone",
+        "title": "Working with private hosted zones",
+        "description": "Configure DNS for resources inside your VPC",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/private-hosted-zones"
+      },
+      {
+        "id": "doc-r53-delete-zone",
+        "title": "Deleting a hosted zone",
+        "description": "Learn how to delete a Route 53 hosted zone",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/delete-hosted-zone"
+      },
+      {
+        "id": "doc-r53-resource-records",
+        "title": "Working with resource records",
+        "description": "Create and manage DNS resource records",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/resource-records"
+      },
+      {
+        "id": "doc-r53-create-record",
+        "title": "Creating records",
+        "description": "Create DNS records in a hosted zone",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/create-record"
+      },
+      {
+        "id": "doc-r53-edit-record",
+        "title": "Editing records",
+        "description": "Modify DNS record values and routing configuration",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/edit-record"
+      },
+      {
+        "id": "doc-r53-delete-record",
+        "title": "Deleting records",
+        "description": "Delete DNS records from a hosted zone",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/delete-record"
+      },
+      {
+        "id": "doc-r53-routing-policies",
+        "title": "Choosing a routing policy",
+        "description": "Choose the right DNS routing policy for your application",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/routing-policies"
+      },
+      {
+        "id": "doc-r53-simple-routing",
+        "title": "Simple routing",
+        "description": "Route traffic to a single resource",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/simple-routing"
+      },
+      {
+        "id": "doc-r53-weighted-routing",
+        "title": "Weighted routing",
+        "description": "Route traffic based on assigned weights",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/weighted-routing"
+      },
+      {
+        "id": "doc-r53-latency-routing",
+        "title": "Latency-based routing",
+        "description": "Route users to the AWS Region with the lowest latency",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/latency-routing"
+      },
+      {
+        "id": "doc-r53-failover-routing",
+        "title": "Failover routing",
+        "description": "Configure active-passive DNS failover",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/failover-routing"
+      },
+      {
+        "id": "doc-r53-geolocation",
+        "title": "Geolocation routing",
+        "description": "Route traffic based on geographic location",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/geolocation-routing"
+      },
+      {
+        "id": "doc-r53-health-checks",
+        "title": "Route 53 health checks",
+        "description": "Monitor endpoint health and DNS failover",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/health-checks"
+      },
+      {
+        "id": "doc-r53-resolver",
+        "title": "Amazon Route 53 Resolver",
+        "description": "DNS resolution for hybrid cloud environments",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/resolver"
+      },
+      {
+        "id": "doc-r53-dnssec",
+        "title": "Configuring DNSSEC signing",
+        "description": "Configure DNSSEC for hosted zones",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileText",
+        "href": "/docs/route53/dnssec"
+      },
+      {
+        "id": "doc-r53-api",
+        "title": "Amazon Route 53 API Reference",
+        "description": "API operations for Amazon Route 53",
+        "category": "documentation",
+        "service": "Route 53",
+        "icon": "FileCode",
+        "href": "/docs/route53/api"
+      },
+      {
+        "id": "doc-ec2",
+        "title": "Amazon EC2 User Guide",
+        "description": "Documentation for Amazon Elastic Compute Cloud",
+        "category": "documentation",
+        "service": "EC2",
+        "icon": "FileText",
+        "href": "/docs/ec2"
+      },
+      {
+        "id": "doc-s3",
+        "title": "Amazon S3 User Guide",
+        "description": "Documentation for Amazon Simple Storage Service",
+        "category": "documentation",
+        "service": "S3",
+        "icon": "FileText",
+        "href": "/docs/s3"
+      },
+      {
+        "id": "doc-vpc",
+        "title": "Amazon VPC User Guide",
+        "description": "Documentation for Amazon Virtual Private Cloud",
+        "category": "documentation",
+        "service": "VPC",
+        "icon": "FileText",
+        "href": "/docs/vpc"
+      },
+      {
+        "id": "doc-lambda",
+        "title": "AWS Lambda Developer Guide",
+        "description": "Build and deploy serverless applications",
+        "category": "documentation",
+        "service": "Lambda",
+        "icon": "FileText",
+        "href": "/docs/lambda"
+      },
+      {
+        "id": "doc-cloudfront",
+        "title": "Amazon CloudFront Developer Guide",
+        "description": "Content delivery and edge caching documentation",
+        "category": "documentation",
+        "service": "CloudFront",
+        "icon": "FileText",
+        "href": "/docs/cloudfront"
+      }
+    ],
+    "knowledgeArticles": [
+      {
+        "id": "ka-dns-records",
+        "title": "How do I configure Route 53 DNS records?",
+        "description": "Learn how to configure DNS records for your domain",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/configure-dns-records"
+      },
+      {
+        "id": "ka-dns-troubleshooting",
+        "title": "How do I troubleshoot DNS resolution issues?",
+        "description": "Troubleshoot common DNS resolution problems",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/dns-troubleshooting"
+      },
+      {
+        "id": "ka-private-zone",
+        "title": "How do I create a private hosted zone?",
+        "description": "Create a private Route 53 hosted zone associated with a VPC",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/private-zone"
+      },
+      {
+        "id": "ka-public-zone",
+        "title": "How do I create a public hosted zone?",
+        "description": "Create a public hosted zone for a domain",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/public-zone"
+      },
+      {
+        "id": "ka-record-not-resolving",
+        "title": "Why is my Route 53 record not resolving?",
+        "description": "Troubleshoot DNS records that are not returning expected responses",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/record-not-resolving"
+      },
+      {
+        "id": "ka-dns-propagation",
+        "title": "How does DNS propagation work?",
+        "description": "Understand DNS caching and propagation",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/dns-propagation"
+      },
+      {
+        "id": "ka-alias-cloudfront",
+        "title": "How do I point Route 53 to CloudFront?",
+        "description": "Configure an alias record pointing to a CloudFront distribution",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/cloudfront"
+      },
+      {
+        "id": "ka-alias-alb",
+        "title": "How do I point Route 53 to an Application Load Balancer?",
+        "description": "Configure DNS routing to an Application Load Balancer",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/alb"
+      },
+      {
+        "id": "ka-health-check",
+        "title": "How do I configure a Route 53 health check?",
+        "description": "Create and monitor endpoint health checks",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/health-check"
+      },
+      {
+        "id": "ka-routing-policy",
+        "title": "Which Route 53 routing policy should I use?",
+        "description": "Compare Route 53 routing policies",
+        "category": "knowledge",
+        "service": "Route 53",
+        "icon": "CircleHelp",
+        "href": "/knowledge/route53/routing-policy"
+      }
+    ],
+    "tutorials": [
+      {
+        "id": "tutorial-r53-first-zone",
+        "title": "Get started with Route 53",
+        "description": "Create your first hosted zone and DNS records",
+        "category": "tutorial",
+        "service": "Route 53",
+        "icon": "GraduationCap",
+        "href": "/tutorials/route53/getting-started"
+      },
+      {
+        "id": "tutorial-r53-create-zone",
+        "title": "Create a Route 53 hosted zone",
+        "description": "Step-by-step guide to creating a hosted zone",
+        "category": "tutorial",
+        "service": "Route 53",
+        "icon": "GraduationCap",
+        "href": "/tutorials/route53/create-hosted-zone"
+      },
+      {
+        "id": "tutorial-r53-dns-record",
+        "title": "Create your first DNS record",
+        "description": "Add an A, CNAME, TXT, or other DNS record",
+        "category": "tutorial",
+        "service": "Route 53",
+        "icon": "GraduationCap",
+        "href": "/tutorials/route53/create-dns-record"
+      },
+      {
+        "id": "tutorial-r53-weighted",
+        "title": "Configure weighted routing",
+        "description": "Distribute traffic across multiple endpoints",
+        "category": "tutorial",
+        "service": "Route 53",
+        "icon": "GraduationCap",
+        "href": "/tutorials/route53/weighted-routing"
+      },
+      {
+        "id": "tutorial-r53-failover",
+        "title": "Configure DNS failover",
+        "description": "Build a highly available DNS failover configuration",
+        "category": "tutorial",
+        "service": "Route 53",
+        "icon": "GraduationCap",
+        "href": "/tutorials/route53/failover"
+      },
+      {
+        "id": "tutorial-r53-latency",
+        "title": "Configure latency-based routing",
+        "description": "Route users to the lowest-latency endpoint",
+        "category": "tutorial",
+        "service": "Route 53",
+        "icon": "GraduationCap",
+        "href": "/tutorials/route53/latency-routing"
+      },
+      {
+        "id": "tutorial-r53-cloudfront",
+        "title": "Route traffic to CloudFront",
+        "description": "Connect Route 53 DNS with CloudFront",
+        "category": "tutorial",
+        "service": "Route 53",
+        "icon": "GraduationCap",
+        "href": "/tutorials/route53/cloudfront"
+      },
+      {
+        "id": "tutorial-r53-api-gateway",
+        "title": "Route a domain to API Gateway",
+        "description": "Configure Route 53 for an API Gateway endpoint",
+        "category": "tutorial",
+        "service": "Route 53",
+        "icon": "GraduationCap",
+        "href": "/tutorials/route53/api-gateway"
+      }
+    ],
+    "blogs": [
+      {
+        "id": "blog-dns-best-practices",
+        "title": "DNS best practices for highly available applications",
+        "description": "Design resilient DNS architectures with Route 53",
+        "category": "blog",
+        "service": "Route 53",
+        "icon": "Newspaper",
+        "href": "/blogs/route53/dns-best-practices"
+      },
+      {
+        "id": "blog-multi-region-dns",
+        "title": "Building multi-Region applications with Route 53",
+        "description": "Use DNS routing to build resilient multi-Region architectures",
+        "category": "blog",
+        "service": "Route 53",
+        "icon": "Newspaper",
+        "href": "/blogs/route53/multi-region"
+      },
+      {
+        "id": "blog-dns-monitoring",
+        "title": "Monitoring DNS health with Route 53",
+        "description": "Monitor DNS endpoints and application availability",
+        "category": "blog",
+        "service": "Route 53",
+        "icon": "Newspaper",
+        "href": "/blogs/route53/dns-monitoring"
+      },
+      {
+        "id": "blog-routing-policies",
+        "title": "Choosing the right DNS routing policy",
+        "description": "Understand simple, weighted, latency, and failover routing",
+        "category": "blog",
+        "service": "Route 53",
+        "icon": "Newspaper",
+        "href": "/blogs/route53/routing-policies"
+      },
+      {
+        "id": "blog-dnssec",
+        "title": "Securing DNS with DNSSEC",
+        "description": "Protect DNS responses using DNSSEC signing",
+        "category": "blog",
+        "service": "Route 53",
+        "icon": "Newspaper",
+        "href": "/blogs/route53/dnssec"
+      },
+      {
+        "id": "blog-private-dns",
+        "title": "Private DNS architectures with Route 53 Resolver",
+        "description": "Build DNS architectures for hybrid environments",
+        "category": "blog",
+        "service": "Route 53",
+        "icon": "Newspaper",
+        "href": "/blogs/route53/private-dns"
+      },
+      {
+        "id": "blog-route53-automation",
+        "title": "Automating DNS management with APIs",
+        "description": "Automate Route 53 configuration and DNS changes",
+        "category": "blog",
+        "service": "Route 53",
+        "icon": "Newspaper",
+        "href": "/blogs/route53/automation"
+      }
+    ],
+    "events": [
+      {
+        "id": "event-reinvent",
+        "title": "AWS re:Invent",
+        "description": "AWS annual cloud computing conference",
+        "category": "event",
+        "service": "AWS",
+        "icon": "Calendar",
+        "href": "/events/reinvent"
+      },
+      {
+        "id": "event-summit",
+        "title": "AWS Summit",
+        "description": "AWS cloud technology event",
+        "category": "event",
+        "service": "AWS",
+        "icon": "Calendar",
+        "href": "/events/summit"
+      },
+      {
+        "id": "event-innovate",
+        "title": "AWS Innovate",
+        "description": "Online AWS technical learning event",
+        "category": "event",
+        "service": "AWS",
+        "icon": "Calendar",
+        "href": "/events/innovate"
+      },
+      {
+        "id": "event-awsome-day",
+        "title": "AWSome Day",
+        "description": "Introduction to AWS cloud technologies",
+        "category": "event",
+        "service": "AWS",
+        "icon": "Calendar",
+        "href": "/events/awsome-day"
+      },
+      {
+        "id": "event-developer-conference",
+        "title": "AWS Developer Conference",
+        "description": "Technical sessions for cloud developers",
+        "category": "event",
+        "service": "AWS",
+        "icon": "Calendar",
+        "href": "/events/developer-conference"
+      }
+    ],
+    "marketplace": [
+      {
+        "id": "marketplace-dns-tools",
+        "title": "DNS Management Tools",
+        "description": "Third-party tools for DNS management and automation",
+        "category": "marketplace",
+        "service": "AWS Marketplace",
+        "icon": "ShoppingBag",
+        "href": "/marketplace/dns-management"
+      },
+      {
+        "id": "marketplace-dns-monitoring",
+        "title": "DNS Monitoring Solutions",
+        "description": "Monitor DNS performance and availability",
+        "category": "marketplace",
+        "service": "AWS Marketplace",
+        "icon": "ShoppingBag",
+        "href": "/marketplace/dns-monitoring"
+      },
+      {
+        "id": "marketplace-network-monitoring",
+        "title": "Network Monitoring",
+        "description": "Monitor network infrastructure and traffic",
+        "category": "marketplace",
+        "service": "AWS Marketplace",
+        "icon": "ShoppingBag",
+        "href": "/marketplace/network-monitoring"
+      },
+      {
+        "id": "marketplace-cloud-security",
+        "title": "Cloud Security Solutions",
+        "description": "Security products for AWS environments",
+        "category": "marketplace",
+        "service": "AWS Marketplace",
+        "icon": "ShoppingBag",
+        "href": "/marketplace/cloud-security"
+      },
+      {
+        "id": "marketplace-infrastructure",
+        "title": "Infrastructure Automation",
+        "description": "Infrastructure automation and management solutions",
+        "category": "marketplace",
+        "service": "AWS Marketplace",
+        "icon": "ShoppingBag",
+        "href": "/marketplace/infrastructure"
+      }
+    ],
+    "resources": [
+      {
+        "id": "resource-example-zone",
+        "title": "example.com",
+        "description": "Hosted zone",
+        "category": "resource",
+        "service": "Route 53",
+        "resourceType": "Hosted zone",
+        "icon": "Globe",
+        "href": "/route53/hosted-zones/example-com"
+      },
+      {
+        "id": "resource-api-example-zone",
+        "title": "api.example.com",
+        "description": "Hosted zone",
+        "category": "resource",
+        "service": "Route 53",
+        "resourceType": "Hosted zone",
+        "icon": "Globe",
+        "href": "/route53/hosted-zones/api-example-com"
+      },
+      {
+        "id": "resource-cloudfront",
+        "title": "E3A1BC2D4EFG5",
+        "description": "CloudFront distribution",
+        "category": "resource",
+        "service": "CloudFront",
+        "resourceType": "Distribution",
+        "icon": "Cloud",
+        "href": "/cloudfront/distributions/E3A1BC2D4EFG5"
+      },
+      {
+        "id": "resource-ec2",
+        "title": "i-0abc123def4567890",
+        "description": "EC2 instance",
+        "category": "resource",
+        "service": "EC2",
+        "resourceType": "Instance",
+        "icon": "Server",
+        "href": "/ec2/instances/i-0abc123def4567890"
+      },
+      {
+        "id": "resource-s3",
+        "title": "my-production-bucket",
+        "description": "S3 bucket",
+        "category": "resource",
+        "service": "S3",
+        "resourceType": "Bucket",
+        "icon": "Database",
+        "href": "/s3/buckets/my-production-bucket"
+      },
+      {
+        "id": "resource-vpc",
+        "title": "vpc-0123456789abcdef0",
+        "description": "Virtual private cloud",
+        "category": "resource",
+        "service": "VPC",
+        "resourceType": "VPC",
+        "icon": "Network",
+        "href": "/vpc/vpcs/vpc-0123456789abcdef0"
+      },
+      {
+        "id": "resource-lambda",
+        "title": "production-api",
+        "description": "Lambda function",
+        "category": "resource",
+        "service": "Lambda",
+        "resourceType": "Function",
+        "icon": "Zap",
+        "href": "/lambda/functions/production-api"
+      },
+      {
+        "id": "resource-rds",
+        "title": "production-database",
+        "description": "RDS database instance",
+        "category": "resource",
+        "service": "RDS",
+        "resourceType": "DB instance",
+        "icon": "Database",
+        "href": "/rds/databases/production-database"
+      }
+    ]
+  }

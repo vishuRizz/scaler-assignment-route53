@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CloudscapeTheme } from "@/components/console/CloudscapeTheme";
+import { AuthProvider } from "@/lib/auth/AuthProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -11,7 +12,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full">
       <body className="h-full">
-        <CloudscapeTheme>{children}</CloudscapeTheme>
+        <CloudscapeTheme>
+          <AuthProvider>{children}</AuthProvider>
+        </CloudscapeTheme>
       </body>
     </html>
   );

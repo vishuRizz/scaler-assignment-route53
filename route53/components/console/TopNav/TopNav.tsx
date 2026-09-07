@@ -3,7 +3,9 @@
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import { CONSOLE_ACCOUNT } from "@/lib/constants/console";
+import { useAuth } from "@/lib/auth/AuthProvider";
 import { AccountDropdown } from "./AccountDropdown";
+import { ConsoleSearch, type ConsoleSearchHandle } from "./ConsoleSearch";
 import styles from "./TopNav.module.css";
 
 function IconButton({
@@ -59,35 +61,13 @@ function ServicesGridIcon() {
 
 function SearchIcon() {
   return (
-    <svg
-      className={styles.searchIcon}
-      width="15"
-      height="15"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden
-    >
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
       <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
       <path
         d="M11 11l3.2 3.2"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function HistoryIcon() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.4" />
-      <path
-        d="M8 4.5V8l2.5 1.5"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
       />
     </svg>
   );
@@ -175,7 +155,11 @@ function SettingsIcon() {
 export function TopNav() {
   const [accountOpen, setAccountOpen] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<ConsoleSearchHandle>(null);
   const menuId = useId();
+  const { session } = useAuth();
+  const displayName = session?.displayName ?? CONSOLE_ACCOUNT.displayName;
+  const accountId = session?.accountId ?? CONSOLE_ACCOUNT.accountId;
 
   useEffect(() => {
     if (!accountOpen) return;
@@ -236,30 +220,19 @@ export function TopNav() {
       </div>
 
       <div className={styles.center}>
-        <label className={`${styles.search} ${styles.searchDesktop}`}>
-          <SearchIcon />
-          <input
-            className={styles.searchInput}
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <span className={styles.shortcut}>[Option+S]</span>
-          <button
-            type="button"
-            className={styles.historyButton}
-            aria-label="Search history"
-          >
-            <HistoryIcon />
-          </button>
-        </label>
+        <ConsoleSearch ref={searchRef} className={styles.searchDesktop} />
       </div>
 
       <div className={styles.right}>
         <span className={styles.mobileOnly}>
-          <IconButton label="Search">
+          <button
+            type="button"
+            className={styles.iconButton}
+            aria-label="Search"
+            onClick={() => searchRef.current?.open()}
+          >
             <SearchIcon />
-          </IconButton>
+          </button>
         </span>
 
         <IconButton label="CloudShell">
@@ -296,10 +269,10 @@ export function TopNav() {
               aria-controls={menuId}
               onClick={() => setAccountOpen((open) => !open)}
             >
-              {CONSOLE_ACCOUNT.displayName} ({CONSOLE_ACCOUNT.accountId})
+              {displayName} ({accountId})
               <Caret pointUp={accountOpen} />
             </button>
-            <span className={styles.accountUsername}>{CONSOLE_ACCOUNT.displayName}</span>
+            <span className={styles.accountUsername}>{displayName}</span>
           </div>
 
           <button
@@ -314,7 +287,12 @@ export function TopNav() {
             <Caret pointUp={accountOpen} />
           </button>
 
-          {accountOpen ? <AccountDropdown id={menuId} /> : null}
+          {accountOpen ? (
+            <AccountDropdown
+              id={menuId}
+              onSignedOut={() => setAccountOpen(false)}
+            />
+          ) : null}
         </div>
       </div>
     </header>

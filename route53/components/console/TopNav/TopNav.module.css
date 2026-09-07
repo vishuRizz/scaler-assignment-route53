@@ -326,7 +326,19 @@
   }
 
   .center {
-    display: none;
+    /* Keep mounted so mobile search can open; collapse layout slot */
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 100%;
+    padding: 0;
+    pointer-events: none;
+    z-index: 1100;
+  }
+
+  .center :global([class*="rootOpen"]) {
+    pointer-events: auto;
   }
 
   .mobileOnly {
