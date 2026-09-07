@@ -18,30 +18,30 @@ function IconButton({
   );
 }
 
-function ChevronDown({ size = 10 }: { size?: number }) {
+function Divider() {
+  return <span className={styles.divider} aria-hidden />;
+}
+
+/** Filled caret — pointUp matches the account tab in Console */
+function Caret({ pointUp = false }: { pointUp?: boolean }) {
   return (
     <svg
-      className={styles.chevron}
-      width={size}
-      height={size}
-      viewBox="0 0 12 12"
-      fill="none"
+      className={styles.caret}
+      width="8"
+      height="6"
+      viewBox="0 0 8 6"
+      fill="currentColor"
       aria-hidden
+      style={pointUp ? { transform: "rotate(180deg)" } : undefined}
     >
-      <path
-        d="M2.5 4.25L6 7.75L9.5 4.25"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M0.8 1.2h6.4L4 5.2 0.8 1.2z" />
     </svg>
   );
 }
 
 function ServicesGridIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
       <rect x="1" y="1" width="3.2" height="3.2" rx="0.4" />
       <rect x="6.4" y="1" width="3.2" height="3.2" rx="0.4" />
       <rect x="11.8" y="1" width="3.2" height="3.2" rx="0.4" />
@@ -59,8 +59,8 @@ function SearchIcon() {
   return (
     <svg
       className={styles.searchIcon}
-      width="14"
-      height="14"
+      width="15"
+      height="15"
       viewBox="0 0 16 16"
       fill="none"
       aria-hidden
@@ -78,7 +78,7 @@ function SearchIcon() {
 
 function HistoryIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
       <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.4" />
       <path
         d="M8 4.5V8l2.5 1.5"
@@ -93,7 +93,7 @@ function HistoryIcon() {
 
 function CloudShellIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden>
       <rect
         x="1.75"
         y="2.75"
@@ -122,7 +122,7 @@ function CloudShellIcon() {
 
 function BellIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden>
       <path
         d="M8 1.75a3.75 3.75 0 013.75 3.75v1.7c0 .55.16 1.09.46 1.55l.84 1.3A1 1 0 0112.2 11.5H3.8a1 1 0 01-.85-1.55l.84-1.3c.3-.46.46-1 .46-1.55V5.5A3.75 3.75 0 018 1.75z"
         stroke="currentColor"
@@ -140,7 +140,7 @@ function BellIcon() {
 
 function HelpIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden>
       <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.4" />
       <path
         d="M6.35 6.2a1.7 1.7 0 013.3.55c0 1.05-.9 1.5-1.55 1.85-.4.2-.6.4-.6.85v.35"
@@ -155,7 +155,7 @@ function HelpIcon() {
 
 function SettingsIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden>
       <path
         d="M6.7 1.7h2.6l.35 1.55c.4.15.78.36 1.12.62l1.5-.7 1.3 1.3-.7 1.5c.26.34.47.72.62 1.12L15 6.7v2.6l-1.55.35c-.15.4-.36.78-.62 1.12l.7 1.5-1.3 1.3-1.5-.7c-.34.26-.72.47-1.12.62L9.3 15H6.7l-.35-1.55a4.9 4.9 0 01-1.12-.62l-1.5.7-1.3-1.3.7-1.5a4.9 4.9 0 01-.62-1.12L1 9.3V6.7l1.55-.35c.15-.4.36-.78.62-1.12l-.7-1.5 1.3-1.3 1.5.7c.34-.26.72-.47 1.12-.62L6.7 1.7z"
         stroke="currentColor"
@@ -168,8 +168,7 @@ function SettingsIcon() {
 }
 
 /**
- * Dark AWS Management Console header — matched to Route 53 screenshot.
- * Swap `/public/assets/aws-logo.svg` for the official white wordmark when you have it.
+ * Dark AWS Management Console header — 48px desktop height.
  */
 export function TopNav() {
   return (
@@ -180,26 +179,26 @@ export function TopNav() {
             className={styles.logoImage}
             src="/assets/aws-logo.svg"
             alt="AWS"
-            width={40}
-            height={22}
+            width={44}
+            height={24}
             priority
           />
         </a>
 
-        <span className={styles.divider} aria-hidden />
+        <Divider />
 
         <button type="button" className={styles.qButton} aria-label="Amazon Q">
           <Image
             className={styles.qIcon}
             src="/assets/amazon-q.svg"
             alt=""
-            width={26}
-            height={26}
+            width={28}
+            height={28}
             aria-hidden
           />
         </button>
 
-        <span className={styles.divider} aria-hidden />
+        <Divider />
 
         <IconButton label="Services">
           <ServicesGridIcon />
@@ -230,32 +229,32 @@ export function TopNav() {
         <IconButton label="CloudShell">
           <CloudShellIcon />
         </IconButton>
+        <Divider />
         <IconButton label="Notifications">
           <BellIcon />
         </IconButton>
+        <Divider />
         <IconButton label="Help">
           <HelpIcon />
         </IconButton>
+        <Divider />
         <IconButton label="Settings">
           <SettingsIcon />
         </IconButton>
+        <Divider />
 
         <button type="button" className={styles.regionButton} aria-label="Regions">
           Global
-          <ChevronDown />
+          <Caret />
         </button>
 
-        <button type="button" className={styles.accountButton} aria-label="Account menu">
-          <span>
-            <span className={styles.accountPrimary}>
-              {CONSOLE_ACCOUNT.displayName} ({CONSOLE_ACCOUNT.accountId})
-              <ChevronDown />
-            </span>
-            <span className={styles.accountSecondary}>
-              {CONSOLE_ACCOUNT.displayName}
-            </span>
-          </span>
-        </button>
+        <div className={styles.accountMenu}>
+          <button type="button" className={styles.accountPill} aria-label="Account menu">
+            {CONSOLE_ACCOUNT.displayName} ({CONSOLE_ACCOUNT.accountId})
+            <Caret pointUp />
+          </button>
+          <span className={styles.accountUsername}>{CONSOLE_ACCOUNT.displayName}</span>
+        </div>
       </div>
     </header>
   );

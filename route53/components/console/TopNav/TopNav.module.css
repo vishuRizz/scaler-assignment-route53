@@ -1,7 +1,7 @@
 .topNav {
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 48px;
   padding: 0 12px 0 4px;
   background: var(--aws-header-bg);
   color: #f1f3f3;
@@ -22,14 +22,14 @@
   display: flex;
   align-items: center;
   min-width: 0;
-  padding: 0 8px 0 10px;
+  padding: 0 12px 0 12px;
 }
 
 .right {
   display: flex;
   align-items: center;
-  gap: 2px;
   flex-shrink: 0;
+  height: 100%;
   margin-left: auto;
 }
 
@@ -38,7 +38,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 0 10px 0 8px;
+  padding: 0 12px 0 10px;
   border-radius: 0;
   text-decoration: none;
 }
@@ -49,23 +49,23 @@
 
 .logoImage {
   display: block;
-  height: 22px;
+  height: 24px;
   width: auto;
 }
 
 .divider {
   width: 1px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.22);
+  height: 24px;
+  background: rgba(255, 255, 255, 0.2);
   flex-shrink: 0;
-  margin: 0 2px;
+  align-self: center;
 }
 
 .qButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
+  width: 44px;
   height: 100%;
   border: none;
   background: transparent;
@@ -80,20 +80,20 @@
 
 .qIcon {
   display: block;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
 }
 
 .iconButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
+  width: 40px;
   height: 100%;
   border: none;
   border-radius: 0;
   background: transparent;
-  color: #d1d5db;
+  color: #ffffff;
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
@@ -112,8 +112,8 @@
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 680px;
-  height: 28px;
+  max-width: 720px;
+  height: 32px;
   background: var(--aws-header-search-bg);
   border: 1px solid var(--aws-header-search-border);
   border-radius: 8px;
@@ -137,18 +137,24 @@
   border: none;
   outline: none;
   background: transparent;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1;
   color: #f1f3f3;
   min-width: 0;
   padding: 0;
+  font-style: italic;
+}
+
+.searchInput:focus,
+.searchInput:not(:placeholder-shown) {
+  font-style: normal;
 }
 
 .searchInput::placeholder {
   color: #9ba3af;
+  font-style: italic;
 }
 
-/* hide native search clear on webkit so layout stays stable */
 .searchInput::-webkit-search-decoration,
 .searchInput::-webkit-search-cancel-button,
 .searchInput::-webkit-search-results-button,
@@ -169,6 +175,7 @@
   white-space: nowrap;
   font-family: inherit;
   font-weight: 400;
+  font-style: normal;
 }
 
 .historyButton {
@@ -194,15 +201,16 @@
 .regionButton {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  height: 32px;
-  padding: 0 8px;
+  gap: 6px;
+  height: 100%;
+  padding: 0 12px;
   border: none;
-  border-radius: 4px;
+  border-radius: 0;
   background: transparent;
-  color: #f1f3f3;
+  color: #ffffff;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 400;
   white-space: nowrap;
 }
 
@@ -210,43 +218,55 @@
   background: var(--aws-header-hover);
 }
 
-.accountButton {
+/**
+ * AWS account chrome: gray tab hangs from top of nav,
+ * federated username sits under it in sky blue, right-aligned.
+ */
+.accountMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  align-self: stretch;
+  height: 100%;
+  margin-left: 4px;
+  padding-right: 2px;
+}
+
+.accountPill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  min-height: 32px;
-  padding: 4px 10px;
-  margin-left: 2px;
+  gap: 8px;
+  height: 28px;
+  padding: 0 12px;
   border: none;
-  border-radius: 8px;
-  background: var(--aws-header-account-bg);
-  color: #f1f3f3;
+  border-radius: 0 0 10px 10px;
+  background: #d5dbdb;
+  color: #16191f;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   cursor: pointer;
-  text-align: left;
-  line-height: 1.15;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1;
 }
 
-.accountButton:hover {
-  background: #364455;
+.accountPill:hover {
+  background: #e9ebed;
 }
 
-.accountPrimary {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.accountUsername {
+  margin-top: 4px;
+  padding-right: 2px;
+  color: #7ec8e3;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
+  line-height: 1;
   white-space: nowrap;
 }
 
-.accountSecondary {
+.caret {
   display: block;
-  font-size: 11px;
-  color: #c6cbd2;
-  white-space: nowrap;
-}
-
-.chevron {
-  opacity: 0.85;
   flex-shrink: 0;
+  color: currentColor;
 }
