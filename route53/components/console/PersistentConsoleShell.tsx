@@ -82,6 +82,11 @@ function ConsoleShellInner({ children }: { children: ReactNode }) {
 
   const closeNav = () => setNavigationOpen(false);
 
+  useEffect(() => {
+    document.documentElement.classList.add("console-app");
+    return () => document.documentElement.classList.remove("console-app");
+  }, []);
+
   return (
     <div className={styles.shell}>
       <TopNav />

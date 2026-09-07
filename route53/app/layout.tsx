@@ -4,8 +4,9 @@ import { AuthProvider } from "@/lib/auth/AuthProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Hosted zones | Route 53 | AWS Console",
-  description: "AWS Route 53 hosted zones console clone",
+  title: "Amazon Route 53 - DNS Service - AWS",
+  description:
+    "A reliable and cost-effective way to route end users to Internet applications",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

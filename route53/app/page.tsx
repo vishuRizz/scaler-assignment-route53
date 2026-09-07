@@ -1,17 +1,12 @@
-"use client";
+import type { Metadata } from "next";
+import { LandingPage } from "@/components/landing/LandingPage";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useAuth } from "@/lib/auth/AuthProvider";
+export const metadata: Metadata = {
+  title: "Amazon Route 53 - DNS Service - AWS",
+  description:
+    "A reliable and cost-effective way to route end users to Internet applications",
+};
 
 export default function HomePage() {
-  const router = useRouter();
-  const { session, ready } = useAuth();
-
-  useEffect(() => {
-    if (!ready) return;
-    router.replace(session ? "/hosted-zones" : "/signin");
-  }, [ready, session, router]);
-
-  return null;
+  return <LandingPage />;
 }

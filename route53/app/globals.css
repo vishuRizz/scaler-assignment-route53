@@ -48,8 +48,8 @@ button[class*="variant-primary"]:not([disabled]):active {
 }
 
 @media (max-width: 767px) {
-  html,
-  body {
+  html.console-app,
+  html.console-app body {
     overflow: hidden;
   }
 }
