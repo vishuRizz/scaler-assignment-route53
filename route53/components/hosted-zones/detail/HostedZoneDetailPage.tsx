@@ -17,6 +17,9 @@ import type { DnsRecord } from "@/lib/types/dns-record";
 import type { HostedZone } from "@/lib/types/hosted-zone";
 import { HostedZoneDetailHeader } from "./HostedZoneDetailHeader";
 import { HostedZoneDetailsExpandable } from "./HostedZoneDetailsExpandable";
+import { AcceleratedRecoveryPanel } from "./AcceleratedRecoveryPanel";
+import { DnssecSigningPanel } from "./DnssecSigningPanel";
+import { HostedZoneTagsPanel } from "./HostedZoneTagsPanel";
 import { RecordsTable } from "./RecordsTable";
 import styles from "./HostedZoneDetailPage.module.css";
 
@@ -273,29 +276,17 @@ export function HostedZoneDetailPage() {
             {
               id: "accelerated-recovery",
               label: "Accelerated recovery",
-              content: (
-                <Box padding="l" color="text-body-secondary">
-                  Accelerated recovery settings will appear here.
-                </Box>
-              ),
+              content: <AcceleratedRecoveryPanel />,
             },
             {
               id: "dnssec",
               label: "DNSSEC signing",
-              content: (
-                <Box padding="l" color="text-body-secondary">
-                  DNSSEC signing settings will appear here.
-                </Box>
-              ),
+              content: <DnssecSigningPanel />,
             },
             {
               id: "tags",
               label: "Hosted zone tags (0)",
-              content: (
-                <Box padding="l" color="text-body-secondary">
-                  No tags associated with the resource.
-                </Box>
-              ),
+              content: <HostedZoneTagsPanel />,
             },
           ]}
         />

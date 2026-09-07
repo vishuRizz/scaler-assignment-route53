@@ -35,6 +35,16 @@
   align-self: baseline;
 }
 
+.detailsShell {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.detailsShell :global([class*="awsui_header"]),
+.detailsShell :global([class*="awsui_root"]) {
+  border-radius: 16px;
+}
+
 .detailValue {
   margin-top: 4px;
   font-size: 14px;
@@ -53,6 +63,41 @@
   font-size: 13px;
   line-height: 1.5;
   color: var(--aws-text);
+}
+
+.acceleratedCopy {
+  margin: 0;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--aws-text-secondary);
+  max-width: 720px;
+}
+
+.statusLabel {
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  color: var(--aws-text);
+}
+
+.dnssecStack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dnssecEmpty {
+  font-size: 14px;
+  color: var(--aws-text-secondary);
+}
+
+.tagsEmpty {
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--aws-text-secondary);
 }
 
 .recordsHint {
