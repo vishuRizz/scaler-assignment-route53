@@ -9,9 +9,13 @@ import styles from "./HostedZoneDetailPage.module.css";
 
 type HostedZoneDetailHeaderProps = {
   zone: HostedZone;
+  onDelete: () => void;
 };
 
-export function HostedZoneDetailHeader({ zone }: HostedZoneDetailHeaderProps) {
+export function HostedZoneDetailHeader({
+  zone,
+  onDelete,
+}: HostedZoneDetailHeaderProps) {
   return (
     <div className={styles.headerRow}>
       <div className={styles.titleBlock}>
@@ -22,7 +26,7 @@ export function HostedZoneDetailHeader({ zone }: HostedZoneDetailHeaderProps) {
         </Link>
       </div>
       <SpaceBetween direction="horizontal" size="xs">
-        <Button>Delete zone</Button>
+        <Button onClick={onDelete}>Delete zone</Button>
         <Button>Test record</Button>
         <Button>Configure query logging</Button>
       </SpaceBetween>

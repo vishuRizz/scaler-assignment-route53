@@ -1,12 +1,17 @@
 "use client";
 
 import BreadcrumbGroup from "@cloudscape-design/components/breadcrumb-group";
+import Flashbar, { type FlashbarProps } from "@cloudscape-design/components/flashbar";
 import Link from "@cloudscape-design/components/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ConsoleShell } from "@/components/console";
-import { listHostedZones } from "@/lib/mock/hosted-zones";
+import {
+  deleteHostedZone,
+  listHostedZones,
+} from "@/lib/mock/hosted-zones";
 import type { HostedZone } from "@/lib/types/hosted-zone";
+import { DeleteHostedZoneModal } from "./DeleteHostedZoneModal";
 import { HostedZonesHeader } from "./HostedZonesHeader";
 import { HostedZonesTable } from "./HostedZonesTable";
 import styles from "./HostedZonesPage.module.css";
@@ -16,8 +21,16 @@ import styles from "./HostedZonesPage.module.css";
  */
 export function HostedZonesPage() {
   const router = useRouter();
-  const [zones, setZones] = useState<HostedZone[]>(() => listHostedZones());
+  const [zones, setZones] = useState<HostedZone[]>([]);
   const [selectedItems, setSelectedItems] = useState<HostedZone[]>([]);
+  const [deleteTarget, setDeleteTarget] = useState<HostedZone | null>(null);
+  const [flashItems, setFlashItems] = useState<FlashbarProps.MessageDefinition[]>(
+    [],
+  );
+
+  useEffect(() => {
+    setZones(listHostedZones());
+  }, []);
 
   const refresh = useCallback(() => {
     setZones(listHostedZones());
@@ -32,6 +45,22 @@ export function HostedZonesPage() {
   const hasSingleSelection = selectedItems.length === 1;
   const selectedCount = selectedItems.length;
 
+  const handleDeleteConfirm = (zone: HostedZone) => {
+    deleteHostedZone(zone.id);
+    setDeleteTarget(null);
+    refresh();
+    setFlashItems([
+      {
+        type: "success",
+        dismissible: true,
+        dismissLabel: "Dismiss",
+        onDismiss: () => setFlashItems([]),
+        content: `Successfully deleted hosted zone ${zone.name}.`,
+        id: "zone-deleted",
+      },
+    ]);
+  };
+
   return (
     <ConsoleShell
       breadcrumbs={
@@ -45,6 +74,8 @@ export function HostedZonesPage() {
       }
     >
       <div className={styles.page}>
+        {flashItems.length > 0 ? <Flashbar items={flashItems} /> : null}
+
         <div className={styles.headerBlock}>
           <HostedZonesHeader
             count={zones.length}
@@ -58,7 +89,7 @@ export function HostedZonesPage() {
               if (selected) router.push(`/hosted-zones/${selected.id}/edit`);
             }}
             onDelete={() => {
-              /* delete modal in next pass */
+              if (selected) setDeleteTarget(selected);
             }}
           />
 
@@ -85,10 +116,23 @@ export function HostedZonesPage() {
         </span>
         <span className={styles.selectionChevron} aria-hidden>
           <svg width="12" height="8" viewBox="0 0 12 8" fill="currentColor">
-            <path d="M1 6.5L6 1.5l5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+            <path
+              d="M1 6.5L6 1.5l5 5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              fill="none"
+              strokeLinecap="round"
+            />
           </svg>
         </span>
       </div>
+
+      <DeleteHostedZoneModal
+        zone={deleteTarget}
+        visible={Boolean(deleteTarget)}
+        onDismiss={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteConfirm}
+      />
     </ConsoleShell>
   );
 }

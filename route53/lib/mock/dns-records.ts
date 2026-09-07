@@ -1,7 +1,38 @@
 import type { DnsRecord } from "@/lib/types/dns-record";
 
-/** In-memory DNS records keyed by hosted zone id. */
-const recordsByZone = new Map<string, DnsRecord[]>();
+const STORAGE_KEY = "route53.mock.dns-records";
+
+/** In-memory cache, backed by localStorage. */
+let recordsByZone = new Map<string, DnsRecord[]>();
+let hydrated = false;
+
+function canUseStorage(): boolean {
+  return typeof window !== "undefined" && typeof localStorage !== "undefined";
+}
+
+function hydrate(): void {
+  if (hydrated || !canUseStorage()) return;
+  hydrated = true;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw) as Record<string, DnsRecord[]>;
+    recordsByZone = new Map(
+      Object.entries(parsed).map(([id, records]) => [id, records]),
+    );
+  } catch {
+    recordsByZone = new Map();
+  }
+}
+
+function persist(): void {
+  if (!canUseStorage()) return;
+  const obj: Record<string, DnsRecord[]> = {};
+  for (const [id, records] of recordsByZone.entries()) {
+    obj[id] = records;
+  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+}
 
 function generateRecordId(): string {
   return `R${Math.random().toString(36).slice(2, 12).toUpperCase()}`;
@@ -20,6 +51,7 @@ function pickNameServers(): string[] {
  * Seeds the default NS + SOA records AWS creates with every hosted zone.
  */
 export function seedDefaultRecords(hostedZoneId: string, zoneName: string): DnsRecord[] {
+  hydrate();
   const nameServers = pickNameServers();
   const nsValue = nameServers.join("\n");
   const primaryNs = nameServers[0];
@@ -55,13 +87,22 @@ export function seedDefaultRecords(hostedZoneId: string, zoneName: string): DnsR
   ];
 
   recordsByZone.set(hostedZoneId, records);
+  persist();
   return records;
 }
 
 export function listRecords(hostedZoneId: string): DnsRecord[] {
+  hydrate();
   return [...(recordsByZone.get(hostedZoneId) ?? [])];
 }
 
 export function getRecordCount(hostedZoneId: string): number {
+  hydrate();
   return recordsByZone.get(hostedZoneId)?.length ?? 0;
+}
+
+export function deleteRecordsForZone(hostedZoneId: string): void {
+  hydrate();
+  recordsByZone.delete(hostedZoneId);
+  persist();
 }

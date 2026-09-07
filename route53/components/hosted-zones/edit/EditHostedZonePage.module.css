@@ -1,0 +1,12 @@
+.readOnlyField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.readOnlyValue {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #0f141a;
+  word-break: break-word;
+}

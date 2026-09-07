@@ -9,8 +9,9 @@ import Tabs from "@cloudscape-design/components/tabs";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ConsoleShell } from "@/components/console";
+import { DeleteHostedZoneModal } from "@/components/hosted-zones/DeleteHostedZoneModal";
 import { listRecords } from "@/lib/mock/dns-records";
-import { getHostedZone } from "@/lib/mock/hosted-zones";
+import { deleteHostedZone, getHostedZone } from "@/lib/mock/hosted-zones";
 import type { DnsRecord } from "@/lib/types/dns-record";
 import type { HostedZone } from "@/lib/types/hosted-zone";
 import { HostedZoneDetailHeader } from "./HostedZoneDetailHeader";
@@ -27,24 +28,25 @@ export function HostedZoneDetailPage() {
   const router = useRouter();
   const zoneId = params.id;
 
-  const [zone, setZone] = useState<HostedZone | undefined>(() =>
-    getHostedZone(zoneId),
-  );
-  const [records, setRecords] = useState<DnsRecord[]>(() =>
-    listRecords(zoneId),
-  );
-  const [showCreatedFlash, setShowCreatedFlash] = useState(
-    () => searchParams.get("created") === "1",
-  );
+  const [zone, setZone] = useState<HostedZone | undefined>(undefined);
+  const [records, setRecords] = useState<DnsRecord[]>([]);
+  const [ready, setReady] = useState(false);
+  const [showCreatedFlash, setShowCreatedFlash] = useState(false);
+  const [showUpdatedFlash, setShowUpdatedFlash] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   useEffect(() => {
     setZone(getHostedZone(zoneId));
     setRecords(listRecords(zoneId));
+    setReady(true);
   }, [zoneId]);
 
   useEffect(() => {
-    if (searchParams.get("created") === "1") {
-      setShowCreatedFlash(true);
+    const created = searchParams.get("created") === "1";
+    const updated = searchParams.get("updated") === "1";
+    if (created || updated) {
+      if (created) setShowCreatedFlash(true);
+      if (updated) setShowUpdatedFlash(true);
       router.replace(`/hosted-zones/${zoneId}`, { scroll: false });
     }
   }, [searchParams, zoneId, router]);
@@ -55,9 +57,10 @@ export function HostedZoneDetailPage() {
   }, [zoneId]);
 
   const flashItems: FlashbarProps.MessageDefinition[] = useMemo(() => {
-    if (!showCreatedFlash || !zone) return [];
-    return [
-      {
+    if (!zone) return [];
+    const items: FlashbarProps.MessageDefinition[] = [];
+    if (showCreatedFlash) {
+      items.push({
         type: "success",
         dismissible: true,
         dismissLabel: "Dismiss",
@@ -66,9 +69,38 @@ export function HostedZoneDetailPage() {
         content:
           "Now you can create records in the hosted zone to specify how you want Route 53 to route traffic for your domain.",
         id: "zone-created",
-      },
-    ];
-  }, [showCreatedFlash, zone]);
+      });
+    }
+    if (showUpdatedFlash) {
+      items.push({
+        type: "success",
+        dismissible: true,
+        dismissLabel: "Dismiss",
+        onDismiss: () => setShowUpdatedFlash(false),
+        content: `Successfully updated hosted zone ${zone.name}.`,
+        id: "zone-updated",
+      });
+    }
+    return items;
+  }, [showCreatedFlash, showUpdatedFlash, zone]);
+
+  if (!ready) {
+    return (
+      <ConsoleShell
+        breadcrumbs={
+          <BreadcrumbGroup
+            items={[
+              { text: "Route 53", href: "/hosted-zones" },
+              { text: "Hosted zones", href: "/hosted-zones" },
+            ]}
+            ariaLabel="Breadcrumbs"
+          />
+        }
+      >
+        <Box color="text-body-secondary">Loading...</Box>
+      </ConsoleShell>
+    );
+  }
 
   if (!zone) {
     return (
@@ -109,9 +141,15 @@ export function HostedZoneDetailPage() {
       <div className={styles.page}>
         {flashItems.length > 0 ? <Flashbar items={flashItems} /> : null}
 
-        <HostedZoneDetailHeader zone={zone} />
+        <HostedZoneDetailHeader
+          zone={zone}
+          onDelete={() => setDeleteOpen(true)}
+        />
 
-        <HostedZoneDetailsExpandable zone={zone} />
+        <HostedZoneDetailsExpandable
+          zone={zone}
+          onEdit={() => router.push(`/hosted-zones/${zone.id}/edit`)}
+        />
 
         <Tabs
           tabs={[
@@ -152,6 +190,17 @@ export function HostedZoneDetailPage() {
           ]}
         />
       </div>
+
+      <DeleteHostedZoneModal
+        zone={zone}
+        visible={deleteOpen}
+        onDismiss={() => setDeleteOpen(false)}
+        onConfirm={(target) => {
+          deleteHostedZone(target.id);
+          setDeleteOpen(false);
+          router.push("/hosted-zones");
+        }}
+      />
     </ConsoleShell>
   );
 }

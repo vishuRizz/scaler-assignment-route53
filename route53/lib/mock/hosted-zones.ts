@@ -1,12 +1,42 @@
 import type { HostedZone, HostedZoneType } from "@/lib/types/hosted-zone";
-import { seedDefaultRecords } from "@/lib/mock/dns-records";
+import {
+  deleteRecordsForZone,
+  getRecordCount,
+  seedDefaultRecords,
+} from "@/lib/mock/dns-records";
+
+const STORAGE_KEY = "route53.mock.hosted-zones";
 
 /**
- * In-memory store for UI development.
- * Empty by default so the list page matches the empty-state screenshot.
- * Swap this module for a real API client later.
+ * Client store backed by localStorage (until FastAPI + SQLite).
  */
 let hostedZones: HostedZone[] = [];
+let hydrated = false;
+
+function canUseStorage(): boolean {
+  return typeof window !== "undefined" && typeof localStorage !== "undefined";
+}
+
+function hydrate(): void {
+  if (hydrated || !canUseStorage()) return;
+  hydrated = true;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      hostedZones = [];
+      return;
+    }
+    const parsed = JSON.parse(raw) as HostedZone[];
+    hostedZones = Array.isArray(parsed) ? parsed : [];
+  } catch {
+    hostedZones = [];
+  }
+}
+
+function persist(): void {
+  if (!canUseStorage()) return;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(hostedZones));
+}
 
 function generateZoneId(): string {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -18,15 +48,27 @@ function generateZoneId(): string {
 }
 
 export function listHostedZones(): HostedZone[] {
-  return [...hostedZones];
+  hydrate();
+  return hostedZones.map((zone) => ({
+    ...zone,
+    recordCount: getRecordCount(zone.id) || zone.recordCount,
+  }));
 }
 
 export function getHostedZone(id: string): HostedZone | undefined {
-  return hostedZones.find((zone) => zone.id === id);
+  hydrate();
+  const zone = hostedZones.find((item) => item.id === id);
+  if (!zone) return undefined;
+  return {
+    ...zone,
+    recordCount: getRecordCount(zone.id) || zone.recordCount,
+  };
 }
 
 export function setHostedZones(zones: HostedZone[]): void {
+  hydrate();
   hostedZones = [...zones];
+  persist();
 }
 
 export type CreateHostedZoneInput = {
@@ -36,6 +78,7 @@ export type CreateHostedZoneInput = {
 };
 
 export function createHostedZone(input: CreateHostedZoneInput): HostedZone {
+  hydrate();
   const name = input.name.trim().replace(/\.$/, "");
   const zone: HostedZone = {
     id: generateZoneId(),
@@ -48,10 +91,50 @@ export function createHostedZone(input: CreateHostedZoneInput): HostedZone {
   };
   seedDefaultRecords(zone.id, name);
   hostedZones = [zone, ...hostedZones];
+  persist();
   return zone;
 }
 
+export type UpdateHostedZoneInput = {
+  description?: string;
+};
+
+export function updateHostedZone(
+  id: string,
+  input: UpdateHostedZoneInput,
+): HostedZone | undefined {
+  hydrate();
+  const index = hostedZones.findIndex((zone) => zone.id === id);
+  if (index < 0) return undefined;
+  const current = hostedZones[index];
+  const updated: HostedZone = {
+    ...current,
+    description:
+      input.description !== undefined
+        ? input.description.trim().slice(0, 256)
+        : current.description,
+  };
+  hostedZones = [
+    ...hostedZones.slice(0, index),
+    updated,
+    ...hostedZones.slice(index + 1),
+  ];
+  persist();
+  return getHostedZone(id);
+}
+
+export function deleteHostedZone(id: string): boolean {
+  hydrate();
+  const exists = hostedZones.some((zone) => zone.id === id);
+  if (!exists) return false;
+  hostedZones = hostedZones.filter((zone) => zone.id !== id);
+  deleteRecordsForZone(id);
+  persist();
+  return true;
+}
+
 export function seedDemoHostedZones(): void {
+  hydrate();
   const zone: HostedZone = {
     id: "Z0123456789ABCDEFGHIJ",
     name: "example.com",
@@ -63,4 +146,5 @@ export function seedDemoHostedZones(): void {
   };
   seedDefaultRecords(zone.id, zone.name);
   hostedZones = [zone];
+  persist();
 }

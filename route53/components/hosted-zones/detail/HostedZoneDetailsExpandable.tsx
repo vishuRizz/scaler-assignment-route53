@@ -11,6 +11,7 @@ import styles from "./HostedZoneDetailPage.module.css";
 
 type HostedZoneDetailsExpandableProps = {
   zone: HostedZone;
+  onEdit: () => void;
 };
 
 function DetailField({
@@ -30,6 +31,7 @@ function DetailField({
 
 export function HostedZoneDetailsExpandable({
   zone,
+  onEdit,
 }: HostedZoneDetailsExpandableProps) {
   const nsRecord = listRecords(zone.id).find((r) => r.type === "NS");
   const nameServers = nsRecord?.value.split("\n").filter(Boolean) ?? [];
@@ -37,7 +39,7 @@ export function HostedZoneDetailsExpandable({
   return (
     <ExpandableSection
       headerText="Hosted zone details"
-      headerActions={<Button>Edit hosted zone</Button>}
+      headerActions={<Button onClick={onEdit}>Edit hosted zone</Button>}
       defaultExpanded={false}
     >
       <ColumnLayout columns={3} variant="text-grid">
