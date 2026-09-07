@@ -1,4 +1,9 @@
+from __future__ import annotations
+
+from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -18,7 +23,6 @@ from app.security import (
     revoke_session,
     verify_password,
 )
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -90,7 +94,7 @@ def login_iam(body: IamLoginRequest, db: Session = Depends(get_db)) -> AuthRespo
 
 @router.post("/logout", response_model=MessageOut)
 def logout(
-    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme),
     db: Session = Depends(get_db),
 ) -> MessageOut:
     if credentials and credentials.credentials:

@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from datetime import datetime, timezone
+from typing import List, Optional
 import secrets
 import string
 
@@ -48,11 +51,11 @@ class User(Base):
     account_id: Mapped[str] = mapped_column(String(12), unique=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
-    sessions: Mapped[list["SessionToken"]] = relationship(
+    sessions: Mapped[List["SessionToken"]] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
     )
-    hosted_zones: Mapped[list["HostedZone"]] = relationship(
+    hosted_zones: Mapped[List["HostedZone"]] = relationship(
         back_populates="owner",
         cascade="all, delete-orphan",
     )
@@ -90,7 +93,7 @@ class HostedZone(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     owner: Mapped[User] = relationship(back_populates="hosted_zones")
-    records: Mapped[list["DnsRecord"]] = relationship(
+    records: Mapped[List["DnsRecord"]] = relationship(
         back_populates="hosted_zone",
         cascade="all, delete-orphan",
     )
@@ -114,7 +117,7 @@ class DnsRecord(Base):
     differentiator: Mapped[str] = mapped_column(String(64), default="-")
     alias: Mapped[bool] = mapped_column(Boolean, default=False)
     value: Mapped[str] = mapped_column(Text)
-    ttl: Mapped[int | None] = mapped_column(Integer, nullable=True, default=300)
+    ttl: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, default=300)
     health_check_id: Mapped[str] = mapped_column(String(64), default="-")
     evaluate_target_health: Mapped[str] = mapped_column(String(16), default="-")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

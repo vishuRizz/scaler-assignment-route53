@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from datetime import timedelta
+from typing import Optional
 
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
@@ -30,7 +33,7 @@ def create_session(db: Session, user: User) -> SessionToken:
     return token
 
 
-def get_user_by_token(db: Session, token: str) -> User | None:
+def get_user_by_token(db: Session, token: str) -> Optional[User]:
     if not token:
         return None
     row = db.query(SessionToken).filter(SessionToken.token == token).first()

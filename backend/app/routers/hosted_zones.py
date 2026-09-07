@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session, joinedload
 
@@ -23,12 +27,12 @@ def _zone_out(zone: HostedZone) -> HostedZoneOut:
     )
 
 
-@router.get("", response_model=list[HostedZoneOut])
+@router.get("", response_model=List[HostedZoneOut])
 def list_zones(
-    q: str | None = Query(default=None, description="Filter by name substring"),
+    q: Optional[str] = Query(default=None, description="Filter by name substring"),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-) -> list[HostedZoneOut]:
+) -> List[HostedZoneOut]:
     query = (
         db.query(HostedZone)
         .options(joinedload(HostedZone.records))

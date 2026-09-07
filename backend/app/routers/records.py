@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import List, Optional
+
 from fastapi import APIRouter, Body, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
@@ -72,13 +76,13 @@ def _create_one(
     return record
 
 
-@router.get("/hosted-zones/{zone_id}/records", response_model=list[DnsRecordOut])
+@router.get("/hosted-zones/{zone_id}/records", response_model=List[DnsRecordOut])
 def list_records(
     zone_id: str,
-    q: str | None = Query(default=None),
+    q: Optional[str] = Query(default=None),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-) -> list[DnsRecordOut]:
+) -> List[DnsRecordOut]:
     zone = get_owned_zone(db, zone_id, user)
     if not zone:
         raise HTTPException(status_code=404, detail="Hosted zone not found")
@@ -103,22 +107,22 @@ def list_records(
 
 @router.post(
     "/hosted-zones/{zone_id}/records",
-    response_model=list[DnsRecordOut],
+    response_model=List[DnsRecordOut],
     status_code=status.HTTP_201_CREATED,
 )
 def create_records(
     zone_id: str,
-    body: list[DnsRecordCreate] = Body(...),
+    body: List[DnsRecordCreate] = Body(...),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-) -> list[DnsRecordOut]:
+) -> List[DnsRecordOut]:
     zone = get_owned_zone(db, zone_id, user)
     if not zone:
         raise HTTPException(status_code=404, detail="Hosted zone not found")
     if not body:
         raise HTTPException(status_code=400, detail="At least one record is required")
 
-    created: list[DnsRecord] = []
+    created: List[DnsRecord] = []
     for item in body:
         created.append(_create_one(db, zone_id, item, zone.name))
     db.commit()
@@ -196,7 +200,7 @@ def delete_record(
 
 @router.post("/records/delete", response_model=MessageOut)
 def delete_records_batch(
-    ids: list[str] = Body(...),
+    ids: List[str] = Body(...),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> MessageOut:

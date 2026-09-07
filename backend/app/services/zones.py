@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+from typing import List, Optional
 
 from sqlalchemy.orm import Session
 
@@ -35,7 +36,7 @@ def normalize_zone_name(name: str) -> str:
     return cleaned
 
 
-def seed_default_records(db: Session, zone: HostedZone) -> list[DnsRecord]:
+def seed_default_records(db: Session, zone: HostedZone) -> List[DnsRecord]:
     name_servers = random.choice(NS_POOLS)
     ns_value = "\n".join(name_servers)
     soa_value = (
@@ -72,7 +73,7 @@ def seed_default_records(db: Session, zone: HostedZone) -> list[DnsRecord]:
     return records
 
 
-def get_owned_zone(db: Session, zone_id: str, user: User) -> HostedZone | None:
+def get_owned_zone(db: Session, zone_id: str, user: User) -> Optional[HostedZone]:
     return (
         db.query(HostedZone)
         .filter(HostedZone.id == zone_id, HostedZone.owner_id == user.id)

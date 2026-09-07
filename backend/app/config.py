@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from functools import lru_cache
+from typing import List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -16,7 +19,7 @@ class Settings(BaseSettings):
     app_name: str = "Route53 Clone API"
 
     @property
-    def cors_origin_list(self) -> list[str]:
+    def cors_origin_list(self) -> List[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
 

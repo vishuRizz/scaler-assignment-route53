@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Dict
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -28,5 +32,5 @@ def on_startup() -> None:
 
 
 @app.get("/health")
-def health() -> dict[str, str]:
+def health() -> Dict[str, str]:
     return {"status": "ok"}

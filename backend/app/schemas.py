@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
@@ -42,7 +45,7 @@ class HostedZoneCreate(BaseModel):
 
 
 class HostedZoneUpdate(BaseModel):
-    description: str | None = Field(default=None, max_length=256)
+    description: Optional[str] = Field(default=None, max_length=256)
 
 
 class HostedZoneOut(BaseModel):
@@ -64,16 +67,16 @@ class DnsRecordCreate(BaseModel):
     routing_policy: str = Field(default="Simple", max_length=32)
     alias: bool = False
     value: str = Field(min_length=1)
-    ttl: int | None = Field(default=300, ge=0)
+    ttl: Optional[int] = Field(default=300, ge=0)
 
 
 class DnsRecordUpdate(BaseModel):
-    name: str | None = Field(default=None, max_length=255)
-    type: str | None = Field(default=None, max_length=16)
-    routing_policy: str | None = Field(default=None, max_length=32)
-    alias: bool | None = None
-    value: str | None = None
-    ttl: int | None = Field(default=None, ge=0)
+    name: Optional[str] = Field(default=None, max_length=255)
+    type: Optional[str] = Field(default=None, max_length=16)
+    routing_policy: Optional[str] = Field(default=None, max_length=32)
+    alias: Optional[bool] = None
+    value: Optional[str] = None
+    ttl: Optional[int] = Field(default=None, ge=0)
 
 
 class DnsRecordOut(BaseModel):
@@ -87,7 +90,7 @@ class DnsRecordOut(BaseModel):
     differentiator: str
     alias: bool
     value: str
-    ttl: int | None
+    ttl: Optional[int]
     health_check_id: str
     evaluate_target_health: str
     created_at: datetime
