@@ -1,16 +1,16 @@
 "use client";
 
 import Alert from "@cloudscape-design/components/alert";
-import BreadcrumbGroup from "@cloudscape-design/components/breadcrumb-group";
 import Box from "@cloudscape-design/components/box";
 import Button from "@cloudscape-design/components/button";
 import Flashbar, { type FlashbarProps } from "@cloudscape-design/components/flashbar";
 import Tabs from "@cloudscape-design/components/tabs";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ConsoleShell } from "@/components/console";
+import { ConsolePage } from "@/components/console/ConsolePage";
 import { DeleteHostedZoneModal } from "@/components/hosted-zones/DeleteHostedZoneModal";
-import { listRecords } from "@/lib/mock/dns-records";
+import { DeleteRecordsModal } from "@/components/hosted-zones/records/DeleteRecordsModal";
+import { deleteRecords, listRecords } from "@/lib/mock/dns-records";
 import { deleteHostedZone, getHostedZone } from "@/lib/mock/hosted-zones";
 import type { DnsRecord } from "@/lib/types/dns-record";
 import type { HostedZone } from "@/lib/types/hosted-zone";
@@ -33,7 +33,10 @@ export function HostedZoneDetailPage() {
   const [ready, setReady] = useState(false);
   const [showCreatedFlash, setShowCreatedFlash] = useState(false);
   const [showUpdatedFlash, setShowUpdatedFlash] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [showRecordCreatedFlash, setShowRecordCreatedFlash] = useState(false);
+  const [showRecordDeletedFlash, setShowRecordDeletedFlash] = useState(false);
+  const [deleteZoneOpen, setDeleteZoneOpen] = useState(false);
+  const [recordsToDelete, setRecordsToDelete] = useState<DnsRecord[]>([]);
 
   useEffect(() => {
     setZone(getHostedZone(zoneId));
@@ -44,9 +47,11 @@ export function HostedZoneDetailPage() {
   useEffect(() => {
     const created = searchParams.get("created") === "1";
     const updated = searchParams.get("updated") === "1";
-    if (created || updated) {
+    const recordCreated = searchParams.get("recordCreated") === "1";
+    if (created || updated || recordCreated) {
       if (created) setShowCreatedFlash(true);
       if (updated) setShowUpdatedFlash(true);
+      if (recordCreated) setShowRecordCreatedFlash(true);
       router.replace(`/hosted-zones/${zoneId}`, { scroll: false });
     }
   }, [searchParams, zoneId, router]);
@@ -81,39 +86,55 @@ export function HostedZoneDetailPage() {
         id: "zone-updated",
       });
     }
+    if (showRecordCreatedFlash) {
+      items.push({
+        type: "success",
+        dismissible: true,
+        dismissLabel: "Dismiss",
+        onDismiss: () => setShowRecordCreatedFlash(false),
+        content: "Records were successfully created.",
+        id: "records-created",
+      });
+    }
+    if (showRecordDeletedFlash) {
+      items.push({
+        type: "success",
+        dismissible: true,
+        dismissLabel: "Dismiss",
+        onDismiss: () => setShowRecordDeletedFlash(false),
+        content: "Records were successfully deleted.",
+        id: "records-deleted",
+      });
+    }
     return items;
-  }, [showCreatedFlash, showUpdatedFlash, zone]);
+  }, [
+    showCreatedFlash,
+    showUpdatedFlash,
+    showRecordCreatedFlash,
+    showRecordDeletedFlash,
+    zone,
+  ]);
 
   if (!ready) {
     return (
-      <ConsoleShell
-        breadcrumbs={
-          <BreadcrumbGroup
-            items={[
-              { text: "Route 53", href: "/hosted-zones" },
-              { text: "Hosted zones", href: "/hosted-zones" },
-            ]}
-            ariaLabel="Breadcrumbs"
-          />
-        }
+      <ConsolePage
+        breadcrumbItems={[
+          { text: "Route 53", href: "/hosted-zones" },
+          { text: "Hosted zones", href: "/hosted-zones" },
+        ]}
       >
         <Box color="text-body-secondary">Loading...</Box>
-      </ConsoleShell>
+      </ConsolePage>
     );
   }
 
   if (!zone) {
     return (
-      <ConsoleShell
-        breadcrumbs={
-          <BreadcrumbGroup
-            items={[
-              { text: "Route 53", href: "/hosted-zones" },
-              { text: "Hosted zones", href: "/hosted-zones" },
-            ]}
-            ariaLabel="Breadcrumbs"
-          />
-        }
+      <ConsolePage
+        breadcrumbItems={[
+          { text: "Route 53", href: "/hosted-zones" },
+          { text: "Hosted zones", href: "/hosted-zones" },
+        ]}
       >
         <Alert type="error" header="Hosted zone not found">
           This hosted zone does not exist or is no longer available.{" "}
@@ -121,29 +142,24 @@ export function HostedZoneDetailPage() {
             Back to Hosted zones
           </Button>
         </Alert>
-      </ConsoleShell>
+      </ConsolePage>
     );
   }
 
   return (
-    <ConsoleShell
-      breadcrumbs={
-        <BreadcrumbGroup
-          items={[
-            { text: "Route 53", href: "/hosted-zones" },
-            { text: "Hosted zones", href: "/hosted-zones" },
-            { text: zone.name, href: `/hosted-zones/${zone.id}` },
-          ]}
-          ariaLabel="Breadcrumbs"
-        />
-      }
+    <ConsolePage
+      breadcrumbItems={[
+        { text: "Route 53", href: "/hosted-zones" },
+        { text: "Hosted zones", href: "/hosted-zones" },
+        { text: zone.name, href: `/hosted-zones/${zone.id}` },
+      ]}
     >
       <div className={styles.page}>
         {flashItems.length > 0 ? <Flashbar items={flashItems} /> : null}
 
         <HostedZoneDetailHeader
           zone={zone}
-          onDelete={() => setDeleteOpen(true)}
+          onDelete={() => setDeleteZoneOpen(true)}
         />
 
         <HostedZoneDetailsExpandable
@@ -157,7 +173,14 @@ export function HostedZoneDetailPage() {
               id: "records",
               label: `Records (${records.length})`,
               content: (
-                <RecordsTable records={records} onRefresh={refresh} />
+                <RecordsTable
+                  records={records}
+                  onRefresh={refresh}
+                  onCreate={() =>
+                    router.push(`/hosted-zones/${zone.id}/records/create`)
+                  }
+                  onDeleteSelected={(selected) => setRecordsToDelete(selected)}
+                />
               ),
             },
             {
@@ -193,14 +216,29 @@ export function HostedZoneDetailPage() {
 
       <DeleteHostedZoneModal
         zone={zone}
-        visible={deleteOpen}
-        onDismiss={() => setDeleteOpen(false)}
+        visible={deleteZoneOpen}
+        onDismiss={() => setDeleteZoneOpen(false)}
         onConfirm={(target) => {
           deleteHostedZone(target.id);
-          setDeleteOpen(false);
+          setDeleteZoneOpen(false);
           router.push("/hosted-zones");
         }}
       />
-    </ConsoleShell>
+
+      <DeleteRecordsModal
+        records={recordsToDelete}
+        visible={recordsToDelete.length > 0}
+        onDismiss={() => setRecordsToDelete([])}
+        onConfirm={(selected) => {
+          deleteRecords(
+            zone.id,
+            selected.map((record) => record.id),
+          );
+          setRecordsToDelete([]);
+          setShowRecordDeletedFlash(true);
+          refresh();
+        }}
+      />
+    </ConsolePage>
   );
 }

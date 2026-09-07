@@ -1,12 +1,11 @@
 "use client";
 
-import BreadcrumbGroup from "@cloudscape-design/components/breadcrumb-group";
 import Button from "@cloudscape-design/components/button";
 import Header from "@cloudscape-design/components/header";
 import Link from "@cloudscape-design/components/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ConsoleShell } from "@/components/console";
+import { ConsolePage } from "@/components/console/ConsolePage";
 import { awsPrimaryButtonStyle } from "@/lib/constants/button-styles";
 import { createHostedZone } from "@/lib/mock/hosted-zones";
 import type { HostedZoneType } from "@/lib/types/hosted-zone";
@@ -49,19 +48,14 @@ export function CreateHostedZonePage() {
   };
 
   return (
-    <ConsoleShell
+    <ConsolePage
       contentType="form"
       navigationOpenByDefault={false}
-      breadcrumbs={
-        <BreadcrumbGroup
-          items={[
-            { text: "Route 53", href: "/hosted-zones" },
-            { text: "Hosted zones", href: "/hosted-zones" },
-            { text: "Create hosted zone", href: "/hosted-zones/create" },
-          ]}
-          ariaLabel="Breadcrumbs"
-        />
-      }
+      breadcrumbItems={[
+        { text: "Route 53", href: "/hosted-zones" },
+        { text: "Hosted zones", href: "/hosted-zones" },
+        { text: "Create hosted zone", href: "/hosted-zones/create" },
+      ]}
     >
       <div className={styles.page}>
         <Header
@@ -121,6 +115,6 @@ export function CreateHostedZonePage() {
           </Button>
         </div>
       </div>
-    </ConsoleShell>
+    </ConsolePage>
   );
 }

@@ -1,0 +1,129 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100%;
+  margin: -16px -20px -24px;
+  padding: 20px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.recordBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 24px;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nameInput {
+  flex: 1;
+  min-width: 0;
+}
+
+.domainSuffix {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: #0f141a;
+  white-space: nowrap;
+}
+
+.ttlRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.ttlInput {
+  width: 140px;
+  max-width: 100%;
+}
+
+.ttlPills {
+  display: flex;
+  gap: 6px;
+}
+
+.ttlPill {
+  height: 28px;
+  min-width: 40px;
+  padding: 0 12px;
+  border: 1px solid #7aa116;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #037f0c;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.ttlPill:hover,
+.ttlPillActive {
+  background: #f2f8e8;
+  border-color: #037f0c;
+}
+
+.addAnotherRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.actionsBar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding-top: 4px;
+}
+
+.existingTable {
+  overflow-x: auto;
+}
+
+.existingName {
+  font-size: 13px;
+}
+
+.existingValue {
+  font-size: 12px;
+  white-space: pre-wrap;
+  max-width: 360px;
+}
+
+@media (max-width: 767px) {
+  .page {
+    margin: -12px -12px -16px;
+    padding: 12px;
+  }
+
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+
+  .actionsBar {
+    justify-content: stretch;
+  }
+
+  .actionsBar > * {
+    flex: 1;
+  }
+}

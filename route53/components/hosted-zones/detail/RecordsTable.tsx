@@ -13,7 +13,7 @@ import SpaceBetween from "@cloudscape-design/components/space-between";
 import Table, { type TableProps } from "@cloudscape-design/components/table";
 import TextFilter from "@cloudscape-design/components/text-filter";
 import { useCollection } from "@cloudscape-design/collection-hooks";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { awsPrimaryButtonStyle } from "@/lib/constants/button-styles";
 import type { DnsRecord } from "@/lib/types/dns-record";
 import styles from "./HostedZoneDetailPage.module.css";
@@ -109,9 +109,16 @@ const ALIAS_OPTIONS: SelectProps.Option[] = [
 type RecordsTableProps = {
   records: DnsRecord[];
   onRefresh: () => void;
+  onCreate: () => void;
+  onDeleteSelected?: (records: DnsRecord[]) => void;
 };
 
-export function RecordsTable({ records, onRefresh }: RecordsTableProps) {
+export function RecordsTable({
+  records,
+  onRefresh,
+  onCreate,
+  onDeleteSelected,
+}: RecordsTableProps) {
   const [selectedItems, setSelectedItems] = useState<DnsRecord[]>([]);
   const [preferences, setPreferences] =
     useState<CollectionPreferencesProps.Preferences>({ pageSize: 20 });
@@ -163,6 +170,12 @@ export function RecordsTable({ records, onRefresh }: RecordsTableProps) {
     selection: {},
   });
 
+  useEffect(() => {
+    setSelectedItems((prev) =>
+      prev.filter((item) => records.some((record) => record.id === item.id)),
+    );
+  }, [records]);
+
   return (
     <Table
       {...collectionProps}
@@ -203,11 +216,18 @@ export function RecordsTable({ records, onRefresh }: RecordsTableProps) {
                 ariaLabel="Refresh"
                 onClick={onRefresh}
               />
-              <Button disabled={selectedItems.length === 0}>
+              <Button
+                disabled={selectedItems.length === 0}
+                onClick={() => onDeleteSelected?.(selectedItems)}
+              >
                 Delete record
               </Button>
               <Button>Import zone file</Button>
-              <Button variant="primary" style={awsPrimaryButtonStyle}>
+              <Button
+                variant="primary"
+                style={awsPrimaryButtonStyle}
+                onClick={onCreate}
+              >
                 Create record
               </Button>
             </SpaceBetween>

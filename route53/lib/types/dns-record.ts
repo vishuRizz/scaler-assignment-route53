@@ -7,9 +7,16 @@ export type DnsRecordType =
   | "SOA"
   | "TXT"
   | "SRV"
-  | "CAA";
+  | "CAA"
+  | "PTR";
 
-export type RoutingPolicy = "Simple" | "Weighted" | "Latency" | "Failover" | "Geolocation" | "Multivalue";
+export type RoutingPolicy =
+  | "Simple"
+  | "Weighted"
+  | "Latency"
+  | "Failover"
+  | "Geolocation"
+  | "Multivalue";
 
 export type DnsRecord = {
   id: string;

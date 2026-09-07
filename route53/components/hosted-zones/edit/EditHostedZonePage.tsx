@@ -1,7 +1,6 @@
 "use client";
 
 import Box from "@cloudscape-design/components/box";
-import BreadcrumbGroup from "@cloudscape-design/components/breadcrumb-group";
 import Button from "@cloudscape-design/components/button";
 import Container from "@cloudscape-design/components/container";
 import FormField from "@cloudscape-design/components/form-field";
@@ -12,7 +11,7 @@ import Textarea from "@cloudscape-design/components/textarea";
 import Alert from "@cloudscape-design/components/alert";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ConsoleShell } from "@/components/console";
+import { ConsolePage } from "@/components/console/ConsolePage";
 import { TagsSection } from "@/components/hosted-zones/create/CreateHostedZoneFormSections";
 import { awsPrimaryButtonStyle } from "@/lib/constants/button-styles";
 import { getHostedZone, updateHostedZone } from "@/lib/mock/hosted-zones";
@@ -70,38 +69,28 @@ export function EditHostedZonePage() {
 
   if (!ready) {
     return (
-      <ConsoleShell
+      <ConsolePage
         contentType="form"
         navigationOpenByDefault={false}
-        breadcrumbs={
-          <BreadcrumbGroup
-            items={[
-              { text: "Route 53", href: "/hosted-zones" },
-              { text: "Hosted zones", href: "/hosted-zones" },
-            ]}
-            ariaLabel="Breadcrumbs"
-          />
-        }
+        breadcrumbItems={[
+          { text: "Route 53", href: "/hosted-zones" },
+          { text: "Hosted zones", href: "/hosted-zones" },
+        ]}
       >
         <Box color="text-body-secondary">Loading...</Box>
-      </ConsoleShell>
+      </ConsolePage>
     );
   }
 
   if (!zone) {
     return (
-      <ConsoleShell
+      <ConsolePage
         contentType="form"
         navigationOpenByDefault={false}
-        breadcrumbs={
-          <BreadcrumbGroup
-            items={[
-              { text: "Route 53", href: "/hosted-zones" },
-              { text: "Hosted zones", href: "/hosted-zones" },
-            ]}
-            ariaLabel="Breadcrumbs"
-          />
-        }
+        breadcrumbItems={[
+          { text: "Route 53", href: "/hosted-zones" },
+          { text: "Hosted zones", href: "/hosted-zones" },
+        ]}
       >
         <Alert type="error" header="Hosted zone not found">
           This hosted zone does not exist or was deleted.{" "}
@@ -109,7 +98,7 @@ export function EditHostedZonePage() {
             Back to Hosted zones
           </Button>
         </Alert>
-      </ConsoleShell>
+      </ConsolePage>
     );
   }
 
@@ -125,20 +114,15 @@ export function EditHostedZonePage() {
     zone.type === "Public" ? "Public hosted zone" : "Private hosted zone";
 
   return (
-    <ConsoleShell
+    <ConsolePage
       contentType="form"
       navigationOpenByDefault={false}
-      breadcrumbs={
-        <BreadcrumbGroup
-          items={[
-            { text: "Route 53", href: "/hosted-zones" },
-            { text: "Hosted zones", href: "/hosted-zones" },
-            { text: zone.name, href: `/hosted-zones/${zone.id}` },
-            { text: "Edit", href: `/hosted-zones/${zone.id}/edit` },
-          ]}
-          ariaLabel="Breadcrumbs"
-        />
-      }
+      breadcrumbItems={[
+        { text: "Route 53", href: "/hosted-zones" },
+        { text: "Hosted zones", href: "/hosted-zones" },
+        { text: zone.name, href: `/hosted-zones/${zone.id}` },
+        { text: "Edit", href: `/hosted-zones/${zone.id}/edit` },
+      ]}
     >
       <div className={createStyles.page}>
         <Header variant="h1" info={<InfoLink />}>
@@ -218,6 +202,6 @@ export function EditHostedZonePage() {
           </Button>
         </div>
       </div>
-    </ConsoleShell>
+    </ConsolePage>
   );
 }

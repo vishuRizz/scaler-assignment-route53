@@ -1,11 +1,10 @@
 "use client";
 
-import BreadcrumbGroup from "@cloudscape-design/components/breadcrumb-group";
 import Flashbar, { type FlashbarProps } from "@cloudscape-design/components/flashbar";
 import Link from "@cloudscape-design/components/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { ConsoleShell } from "@/components/console";
+import { ConsolePage } from "@/components/console/ConsolePage";
 import {
   deleteHostedZone,
   listHostedZones,
@@ -62,16 +61,11 @@ export function HostedZonesPage() {
   };
 
   return (
-    <ConsoleShell
-      breadcrumbs={
-        <BreadcrumbGroup
-          items={[
-            { text: "Route 53", href: "/hosted-zones" },
-            { text: "Hosted zones", href: "/hosted-zones" },
-          ]}
-          ariaLabel="Breadcrumbs"
-        />
-      }
+    <ConsolePage
+      breadcrumbItems={[
+        { text: "Route 53", href: "/hosted-zones" },
+        { text: "Hosted zones", href: "/hosted-zones" },
+      ]}
     >
       <div className={styles.page}>
         {flashItems.length > 0 ? <Flashbar items={flashItems} /> : null}
@@ -133,6 +127,6 @@ export function HostedZonesPage() {
         onDismiss={() => setDeleteTarget(null)}
         onConfirm={handleDeleteConfirm}
       />
-    </ConsoleShell>
+    </ConsolePage>
   );
 }

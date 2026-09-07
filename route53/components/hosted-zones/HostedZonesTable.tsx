@@ -11,19 +11,32 @@ import Box from "@cloudscape-design/components/box";
 import Button from "@cloudscape-design/components/button";
 import SpaceBetween from "@cloudscape-design/components/space-between";
 import { useCollection } from "@cloudscape-design/collection-hooks";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { HostedZone } from "@/lib/types/hosted-zone";
 import { HostedZonesEmptyState } from "./HostedZonesEmptyState";
+
+function ZoneNameLink({ zone }: { zone: HostedZone }) {
+  const router = useRouter();
+  return (
+    <Link
+      href={`/hosted-zones/${zone.id}`}
+      fontSize="body-m"
+      onFollow={(event) => {
+        event.preventDefault();
+        router.push(`/hosted-zones/${zone.id}`);
+      }}
+    >
+      {zone.name}
+    </Link>
+  );
+}
 
 const COLUMN_DEFINITIONS: TableProps.ColumnDefinition<HostedZone>[] = [
   {
     id: "name",
     header: "Hosted zone name",
-    cell: (item) => (
-      <Link href={`/hosted-zones/${item.id}`} fontSize="body-m">
-        {item.name}
-      </Link>
-    ),
+    cell: (item) => <ZoneNameLink zone={item} />,
     sortingField: "name",
     isRowHeader: true,
   },
