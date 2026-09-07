@@ -3,5 +3,7 @@
 
 # ...except the app, backend, and this file
 !/.gitignore
+!/README.md
+!/image.png
 !/route53/
 !/backend/
