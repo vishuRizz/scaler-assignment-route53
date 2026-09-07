@@ -90,6 +90,10 @@
   padding: 16px 20px 24px;
 }
 
+.contentForm {
+  background: #f2f3f3;
+}
+
 .tools {
   width: 300px;
   flex-shrink: 0;

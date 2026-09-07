@@ -13,6 +13,8 @@ type ConsoleShellProps = {
   breadcrumbs?: ReactNode;
   tools?: ReactNode;
   contentType?: "default" | "table" | "form" | "wizard" | "cards" | "dashboard";
+  /** When false, side nav starts closed (e.g. create form). Default true. */
+  navigationOpenByDefault?: boolean;
   notifications?: ReactNode;
 };
 
@@ -39,14 +41,22 @@ export function ConsoleShell({
   children,
   breadcrumbs,
   tools,
+  contentType = "default",
+  navigationOpenByDefault = true,
 }: ConsoleShellProps) {
   const isPhone = useIsPhone();
-  const [navigationOpen, setNavigationOpen] = useState(true);
+  const [navigationOpen, setNavigationOpen] = useState(
+    () => navigationOpenByDefault,
+  );
   const [toolsOpen, setToolsOpen] = useState(false);
 
   useEffect(() => {
-    setNavigationOpen(!isPhone);
-  }, [isPhone]);
+    if (isPhone) {
+      setNavigationOpen(false);
+    } else {
+      setNavigationOpen(navigationOpenByDefault);
+    }
+  }, [isPhone, navigationOpenByDefault]);
 
   const closeNav = () => setNavigationOpen(false);
 
@@ -105,7 +115,11 @@ export function ConsoleShell({
           </>
         ) : null}
 
-        <main className={styles.content}>{children}</main>
+        <main
+          className={`${styles.content}${contentType === "form" ? ` ${styles.contentForm}` : ""}`}
+        >
+          {children}
+        </main>
 
         {tools && toolsOpen ? (
           <aside className={styles.tools} aria-label="Tools">
