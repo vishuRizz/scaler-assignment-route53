@@ -15,7 +15,6 @@
   border: 0;
 }
 
-/* Soften Tailwind vs Cloudscape collisions */
 button,
 input,
 select,
@@ -24,21 +23,33 @@ textarea {
 }
 
 /*
- * Force AWS orange on Cloudscape primary buttons.
- * Scoped styles use high specificity; !important ensures #ff9903 wins.
+ * AWS Create hosted zone / primary CTA:
+ * solid #ff9903 with black text (matches Console screenshot).
  */
 button[class*="variant-primary"]:not([disabled]) {
+  background: #ff9903 !important;
   background-color: #ff9903 !important;
   border-color: #ff9903 !important;
-  color: #ffffff !important;
+  color: #16191f !important;
 }
 
 button[class*="variant-primary"]:not([disabled]):hover {
+  background: #ec7211 !important;
   background-color: #ec7211 !important;
   border-color: #ec7211 !important;
+  color: #16191f !important;
 }
 
 button[class*="variant-primary"]:not([disabled]):active {
+  background: #eb5f07 !important;
   background-color: #eb5f07 !important;
   border-color: #eb5f07 !important;
+  color: #16191f !important;
+}
+
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow: hidden;
+  }
 }

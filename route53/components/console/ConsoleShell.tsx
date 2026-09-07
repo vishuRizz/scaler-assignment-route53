@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { BreadcrumbStrip } from "@/components/console/BreadcrumbStrip/BreadcrumbStrip";
 import { ConsoleFooter } from "@/components/console/ConsoleFooter/ConsoleFooter";
 import { Route53SideNav } from "@/components/console/side-navigation/Route53SideNav";
@@ -12,22 +12,43 @@ type ConsoleShellProps = {
   children: ReactNode;
   breadcrumbs?: ReactNode;
   tools?: ReactNode;
-  /** Kept for API compatibility; layout is custom (not AppLayout). */
   contentType?: "default" | "table" | "form" | "wizard" | "cards" | "dashboard";
   notifications?: ReactNode;
 };
 
+function useIsPhone() {
+  const [isPhone, setIsPhone] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsPhone(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  return isPhone;
+}
+
 /**
  * AWS Console chrome matching Route 53:
- * TopNav → full-width breadcrumb strip → sidebar (Route 53) | content → footer
+ * TopNav → breadcrumb strip → sidebar | content → footer
+ * On phone: sidebar is an overlay drawer.
  */
 export function ConsoleShell({
   children,
   breadcrumbs,
   tools,
 }: ConsoleShellProps) {
+  const isPhone = useIsPhone();
   const [navigationOpen, setNavigationOpen] = useState(true);
   const [toolsOpen, setToolsOpen] = useState(false);
+
+  useEffect(() => {
+    setNavigationOpen(!isPhone);
+  }, [isPhone]);
+
+  const closeNav = () => setNavigationOpen(false);
 
   return (
     <div className={styles.shell}>
@@ -43,32 +64,45 @@ export function ConsoleShell({
 
       <div className={styles.workspace}>
         {navigationOpen ? (
-          <aside className={styles.sidebar} aria-label={`${APP_NAME} navigation`}>
-            <div className={styles.sidebarHeader}>
-              <a className={styles.sidebarTitle} href="/hosted-zones">
-                {APP_NAME}
-              </a>
+          <>
+            {isPhone ? (
               <button
                 type="button"
-                className={styles.collapseButton}
-                aria-label="Close side navigation"
-                onClick={() => setNavigationOpen(false)}
-              >
-                <svg width="16" height="20" viewBox="0 0 16 20" fill="none" aria-hidden>
-                  <path
-                    d="M10 4L5.5 10L10 16"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div className={styles.sidebarNav}>
-              <Route53SideNav />
-            </div>
-          </aside>
+                className={styles.backdrop}
+                aria-label="Close navigation"
+                onClick={closeNav}
+              />
+            ) : null}
+            <aside
+              className={`${styles.sidebar}${isPhone ? ` ${styles.sidebarDrawer}` : ""}`}
+              aria-label={`${APP_NAME} navigation`}
+            >
+              <div className={styles.sidebarHeader}>
+                <a className={styles.sidebarTitle} href="/hosted-zones">
+                  {APP_NAME}
+                </a>
+                <button
+                  type="button"
+                  className={styles.collapseButton}
+                  aria-label="Close side navigation"
+                  onClick={closeNav}
+                >
+                  <svg width="16" height="20" viewBox="0 0 16 20" fill="none" aria-hidden>
+                    <path
+                      d="M10 4L5.5 10L10 16"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div className={styles.sidebarNav}>
+                <Route53SideNav onFollow={isPhone ? closeNav : undefined} />
+              </div>
+            </aside>
+          </>
         ) : null}
 
         <main className={styles.content}>{children}</main>
@@ -80,7 +114,9 @@ export function ConsoleShell({
         ) : null}
       </div>
 
-      <ConsoleFooter />
+      <div className={styles.desktopFooter}>
+        <ConsoleFooter />
+      </div>
     </div>
   );
 }

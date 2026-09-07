@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useId, useRef, useState } from "react";
 import { CONSOLE_ACCOUNT } from "@/lib/constants/console";
+import { AccountDropdown } from "./AccountDropdown";
 import styles from "./TopNav.module.css";
 
 function IconButton({
@@ -171,6 +173,34 @@ function SettingsIcon() {
  * Dark AWS Management Console header — 48px desktop height.
  */
 export function TopNav() {
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountMenuRef = useRef<HTMLDivElement>(null);
+  const menuId = useId();
+
+  useEffect(() => {
+    if (!accountOpen) return;
+
+    function onPointerDown(event: MouseEvent) {
+      if (
+        accountMenuRef.current &&
+        !accountMenuRef.current.contains(event.target as Node)
+      ) {
+        setAccountOpen(false);
+      }
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setAccountOpen(false);
+    }
+
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [accountOpen]);
+
   return (
     <header className={styles.topNav} role="banner">
       <div className={styles.left}>
@@ -206,7 +236,7 @@ export function TopNav() {
       </div>
 
       <div className={styles.center}>
-        <label className={styles.search}>
+        <label className={`${styles.search} ${styles.searchDesktop}`}>
           <SearchIcon />
           <input
             className={styles.searchInput}
@@ -226,6 +256,12 @@ export function TopNav() {
       </div>
 
       <div className={styles.right}>
+        <span className={styles.mobileOnly}>
+          <IconButton label="Search">
+            <SearchIcon />
+          </IconButton>
+        </span>
+
         <IconButton label="CloudShell">
           <CloudShellIcon />
         </IconButton>
@@ -233,27 +269,52 @@ export function TopNav() {
         <IconButton label="Notifications">
           <BellIcon />
         </IconButton>
-        <Divider />
-        <IconButton label="Help">
-          <HelpIcon />
-        </IconButton>
-        <Divider />
-        <IconButton label="Settings">
-          <SettingsIcon />
-        </IconButton>
-        <Divider />
 
-        <button type="button" className={styles.regionButton} aria-label="Regions">
-          Global
-          <Caret />
-        </button>
-
-        <div className={styles.accountMenu}>
-          <button type="button" className={styles.accountPill} aria-label="Account menu">
-            {CONSOLE_ACCOUNT.displayName} ({CONSOLE_ACCOUNT.accountId})
-            <Caret pointUp />
+        <span className={styles.desktopOnly}>
+          <Divider />
+          <IconButton label="Help">
+            <HelpIcon />
+          </IconButton>
+          <Divider />
+          <IconButton label="Settings">
+            <SettingsIcon />
+          </IconButton>
+          <Divider />
+          <button type="button" className={styles.regionButton} aria-label="Regions">
+            Global
+            <Caret />
           </button>
-          <span className={styles.accountUsername}>{CONSOLE_ACCOUNT.displayName}</span>
+        </span>
+
+        <div className={styles.accountCluster} ref={accountMenuRef}>
+          <div className={`${styles.accountMenu} ${styles.desktopOnly}`}>
+            <button
+              type="button"
+              className={`${styles.accountPill}${accountOpen ? ` ${styles.accountPillOpen}` : ""}`}
+              aria-label="Account menu"
+              aria-expanded={accountOpen}
+              aria-controls={menuId}
+              onClick={() => setAccountOpen((open) => !open)}
+            >
+              {CONSOLE_ACCOUNT.displayName} ({CONSOLE_ACCOUNT.accountId})
+              <Caret pointUp={accountOpen} />
+            </button>
+            <span className={styles.accountUsername}>{CONSOLE_ACCOUNT.displayName}</span>
+          </div>
+
+          <button
+            type="button"
+            className={`${styles.moreButton} ${styles.mobileOnly}`}
+            aria-label="More"
+            aria-expanded={accountOpen}
+            aria-controls={menuId}
+            onClick={() => setAccountOpen((open) => !open)}
+          >
+            More
+            <Caret pointUp={accountOpen} />
+          </button>
+
+          {accountOpen ? <AccountDropdown id={menuId} /> : null}
         </div>
       </div>
     </header>

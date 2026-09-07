@@ -101,3 +101,19 @@
 .toolButtonActive:hover {
   background: #e9ebed;
 }
+
+@media (max-width: 767px) {
+  .strip {
+    min-height: 40px;
+    padding: 0 10px 0 8px;
+    gap: 8px;
+  }
+
+  .left {
+    gap: 8px;
+  }
+
+  .breadcrumbs {
+    overflow: hidden;
+  }
+}

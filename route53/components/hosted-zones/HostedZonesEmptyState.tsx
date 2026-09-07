@@ -3,6 +3,7 @@
 import Box from "@cloudscape-design/components/box";
 import Button from "@cloudscape-design/components/button";
 import SpaceBetween from "@cloudscape-design/components/space-between";
+import { awsPrimaryButtonStyle } from "@/lib/constants/button-styles";
 
 type HostedZonesEmptyStateProps = {
   onCreate: () => void;
@@ -21,7 +22,7 @@ export function HostedZonesEmptyState({ onCreate }: HostedZonesEmptyStateProps) 
             There are no hosted zones created for this account.
           </Box>
         </SpaceBetween>
-        <Button variant="primary" onClick={onCreate}>
+        <Button variant="primary" onClick={onCreate} style={awsPrimaryButtonStyle}>
           Create hosted zone
         </Button>
       </SpaceBetween>

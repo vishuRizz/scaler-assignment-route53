@@ -22,6 +22,9 @@ export function CloudscapeTheme({ children }: { children: ReactNode }) {
           colorBorderButtonPrimaryDefault: AWS_PRIMARY,
           colorBorderButtonPrimaryHover: AWS_PRIMARY_HOVER,
           colorBorderButtonPrimaryActive: AWS_PRIMARY_ACTIVE,
+          colorTextButtonPrimaryDefault: "#16191f",
+          colorTextButtonPrimaryHover: "#16191f",
+          colorTextButtonPrimaryActive: "#16191f",
         },
       },
     });
