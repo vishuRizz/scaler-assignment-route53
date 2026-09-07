@@ -7,15 +7,6 @@ export const COMING_SOON_PAGES: Record<
     breadcrumbs: { text: string; href: string }[];
   }
 > = {
-  dashboard: {
-    title: "Dashboard",
-    description:
-      "The Route 53 dashboard summarizes domains, hosted zones, and health check status.",
-    breadcrumbs: [
-      { text: "Route 53", href: "/hosted-zones" },
-      { text: "Dashboard", href: "/dashboard" },
-    ],
-  },
   "health-checks": {
     title: "Health checks",
     description:

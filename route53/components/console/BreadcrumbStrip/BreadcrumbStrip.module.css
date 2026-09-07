@@ -33,7 +33,7 @@
   height: 28px;
   border: none;
   border-radius: 50%;
-  background: #0972d3;
+  background: #43b4ff;
   color: #ffffff;
   cursor: pointer;
   padding: 0;
@@ -41,13 +41,14 @@
 }
 
 .hamburger:hover {
-  background: #033d8b;
+  background: #2ea0ef;
 }
 
 .hamburgerLines {
   display: flex;
   flex-direction: column;
-  gap: 2.5px;
+  justify-content: center;
+  gap: 4px;
   width: 12px;
 }
 
@@ -57,6 +58,14 @@
   width: 100%;
   background: #ffffff;
   border-radius: 1px;
+}
+
+:global(html[data-visual-mode="dark"]) .hamburgerLines span {
+  background: #0f141a;
+}
+
+:global(html[data-visual-mode="light"]) .hamburgerLines span {
+  background: #ffffff;
 }
 
 .breadcrumbs {
