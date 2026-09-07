@@ -1,0 +1,128 @@
+.topNav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  background: var(--aws-header-bg);
+  color: #ffffff;
+  flex-shrink: 0;
+  z-index: 1000;
+}
+
+.left,
+.right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+  padding: 0 16px;
+}
+
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 6px;
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+.logoLink:hover {
+  background: var(--aws-header-hover);
+}
+
+.logoImage {
+  display: block;
+  height: 22px;
+  width: auto;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 2px;
+  background: transparent;
+  color: #d5dbdb;
+  cursor: pointer;
+  padding: 0;
+}
+
+.iconButton:hover {
+  background: var(--aws-header-hover);
+  color: #ffffff;
+}
+
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: auto;
+  gap: 6px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 2px;
+  background: transparent;
+  color: #d5dbdb;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.menuButton:hover {
+  background: var(--aws-header-hover);
+  color: #ffffff;
+}
+
+.menuButton svg {
+  flex-shrink: 0;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  width: min(640px, 100%);
+  height: 28px;
+  background: #ffffff;
+  border-radius: 2px;
+  padding: 0 10px;
+  gap: 8px;
+  color: #545b64;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #16191f;
+  min-width: 0;
+}
+
+.searchInput::placeholder {
+  color: #687078;
+}
+
+.shortcut {
+  font-size: 11px;
+  line-height: 1;
+  padding: 3px 6px;
+  border-radius: 2px;
+  background: #f2f3f3;
+  color: #545b64;
+  border: 1px solid #d5dbdb;
+  white-space: nowrap;
+}

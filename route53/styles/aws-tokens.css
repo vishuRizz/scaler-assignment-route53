@@ -1,0 +1,59 @@
+/**
+ * AWS Console visual tokens — tuned to match Route 53 screenshots.
+ * Cloudscape defaults lean blue; console primary actions are orange.
+ */
+:root {
+  --aws-header-bg: #232f3e;
+  --aws-header-hover: #37475a;
+  --aws-footer-bg: #232f3e;
+  --aws-orange: #ff9900;
+  --aws-orange-hover: #ec7211;
+  --aws-orange-active: #eb5f07;
+  --aws-link: #0073bb;
+  --aws-link-hover: #005a9c;
+  --aws-border: #eaeded;
+  --aws-text: #16191f;
+  --aws-text-secondary: #545b64;
+  --aws-nav-active: #0972d3;
+  --aws-page-bg: #ffffff;
+  --aws-sidebar-width: 280px;
+
+  /* Cloudscape primary button → AWS orange */
+  --color-background-button-primary-default: #ec7211;
+  --color-background-button-primary-hover: #eb5f07;
+  --color-background-button-primary-active: #dd6b10;
+  --color-border-button-primary-default: #ec7211;
+  --color-border-button-primary-hover: #eb5f07;
+  --color-border-button-primary-active: #dd6b10;
+  --color-foreground-control-default: #ffffff;
+  --color-text-button-primary-default: #ffffff;
+  --color-text-button-primary-hover: #ffffff;
+  --color-text-button-primary-active: #ffffff;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--aws-page-bg);
+  color: var(--aws-text);
+  font-family:
+    "Amazon Ember",
+    "Helvetica Neue",
+    Roboto,
+    Arial,
+    sans-serif;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: var(--aws-link);
+}
