@@ -18,33 +18,158 @@ function IconButton({
   );
 }
 
-function ServicesGridIcon() {
+function ChevronDown({ size = 10 }: { size?: number }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-      <rect x="1" y="1" width="4" height="4" rx="0.5" />
-      <rect x="6" y="1" width="4" height="4" rx="0.5" />
-      <rect x="11" y="1" width="4" height="4" rx="0.5" />
-      <rect x="1" y="6" width="4" height="4" rx="0.5" />
-      <rect x="6" y="6" width="4" height="4" rx="0.5" />
-      <rect x="11" y="6" width="4" height="4" rx="0.5" />
-      <rect x="1" y="11" width="4" height="4" rx="0.5" />
-      <rect x="6" y="11" width="4" height="4" rx="0.5" />
-      <rect x="11" y="11" width="4" height="4" rx="0.5" />
+    <svg
+      className={styles.chevron}
+      width={size}
+      height={size}
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M2.5 4.25L6 7.75L9.5 4.25"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
-function ChevronDown() {
+function ServicesGridIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" />
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+      <rect x="1" y="1" width="3.2" height="3.2" rx="0.4" />
+      <rect x="6.4" y="1" width="3.2" height="3.2" rx="0.4" />
+      <rect x="11.8" y="1" width="3.2" height="3.2" rx="0.4" />
+      <rect x="1" y="6.4" width="3.2" height="3.2" rx="0.4" />
+      <rect x="6.4" y="6.4" width="3.2" height="3.2" rx="0.4" />
+      <rect x="11.8" y="6.4" width="3.2" height="3.2" rx="0.4" />
+      <rect x="1" y="11.8" width="3.2" height="3.2" rx="0.4" />
+      <rect x="6.4" y="11.8" width="3.2" height="3.2" rx="0.4" />
+      <rect x="11.8" y="11.8" width="3.2" height="3.2" rx="0.4" />
+    </svg>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg
+      className={styles.searchIcon}
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden
+    >
+      <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M11 11l3.2 3.2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function HistoryIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.4" />
+      <path
+        d="M8 4.5V8l2.5 1.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CloudShellIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <rect
+        x="1.75"
+        y="2.75"
+        width="12.5"
+        height="10.5"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <path
+        d="M4.5 6.25L6.75 8L4.5 9.75"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.25 10.25H11.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M8 1.75a3.75 3.75 0 013.75 3.75v1.7c0 .55.16 1.09.46 1.55l.84 1.3A1 1 0 0112.2 11.5H3.8a1 1 0 01-.85-1.55l.84-1.3c.3-.46.46-1 .46-1.55V5.5A3.75 3.75 0 018 1.75z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <path
+        d="M6.25 12.25a1.75 1.75 0 003.5 0"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function HelpIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.4" />
+      <path
+        d="M6.35 6.2a1.7 1.7 0 013.3.55c0 1.05-.9 1.5-1.55 1.85-.4.2-.6.4-.6.85v.35"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <circle cx="8" cy="11.55" r="0.7" fill="currentColor" />
+    </svg>
+  );
+}
+
+function SettingsIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M6.7 1.7h2.6l.35 1.55c.4.15.78.36 1.12.62l1.5-.7 1.3 1.3-.7 1.5c.26.34.47.72.62 1.12L15 6.7v2.6l-1.55.35c-.15.4-.36.78-.62 1.12l.7 1.5-1.3 1.3-1.5-.7c-.34.26-.72.47-1.12.62L9.3 15H6.7l-.35-1.55a4.9 4.9 0 01-1.12-.62l-1.5.7-1.3-1.3.7-1.5a4.9 4.9 0 01-.62-1.12L1 9.3V6.7l1.55-.35c.15-.4.36-.78.62-1.12l-.7-1.5 1.3-1.3 1.5.7c.34-.26.72-.47 1.12-.62L6.7 1.7z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="2.1" stroke="currentColor" strokeWidth="1.3" />
     </svg>
   );
 }
 
 /**
- * Dark AWS Management Console header.
- * Replace /public/assets/aws-logo.svg with the official mark when you have it.
+ * Dark AWS Management Console header — matched to Route 53 screenshot.
+ * Swap `/public/assets/aws-logo.svg` for the official white wordmark when you have it.
  */
 export function TopNav() {
   return (
@@ -55,20 +180,26 @@ export function TopNav() {
             className={styles.logoImage}
             src="/assets/aws-logo.svg"
             alt="AWS"
-            width={48}
+            width={40}
             height={22}
             priority
           />
         </a>
 
-        <IconButton label="Favorites">
-          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden>
-            <path
-              fill="#aab7ff"
-              d="M8 1.5l1.8 3.7 4.1.6-3 2.9.7 4.1L8 11.7 4.4 13.8l.7-4.1-3-2.9 4.1-.6L8 1.5z"
-            />
-          </svg>
-        </IconButton>
+        <span className={styles.divider} aria-hidden />
+
+        <button type="button" className={styles.qButton} aria-label="Amazon Q">
+          <Image
+            className={styles.qIcon}
+            src="/assets/amazon-q.svg"
+            alt=""
+            width={26}
+            height={26}
+            aria-hidden
+          />
+        </button>
+
+        <span className={styles.divider} aria-hidden />
 
         <IconButton label="Services">
           <ServicesGridIcon />
@@ -77,9 +208,7 @@ export function TopNav() {
 
       <div className={styles.center}>
         <label className={styles.search}>
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-            <path d="M11.5 10.4l3.2 3.2-.9.9-3.2-3.2a5.5 5.5 0 11.9-1zM6.5 10.5a4 4 0 100-8 4 4 0 000 8z" />
-          </svg>
+          <SearchIcon />
           <input
             className={styles.searchInput}
             type="search"
@@ -87,42 +216,45 @@ export function TopNav() {
             aria-label="Search"
           />
           <kbd className={styles.shortcut}>Option+S</kbd>
+          <button
+            type="button"
+            className={styles.historyButton}
+            aria-label="Search history"
+          >
+            <HistoryIcon />
+          </button>
         </label>
       </div>
 
       <div className={styles.right}>
         <IconButton label="CloudShell">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-            <path d="M2 3h12v10H2V3zm1 1v8h10V4H3zm2 2.5L7.5 8 5 9.5v-1l1.2-.7L5 6.5v-1zm3 4h3v1H8v-1z" />
-          </svg>
+          <CloudShellIcon />
         </IconButton>
         <IconButton label="Notifications">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-            <path d="M8 1a4 4 0 014 4v2.5l1.5 2H2.5L4 7.5V5a4 4 0 014-4zm-2 11a2 2 0 004 0H6z" />
-          </svg>
+          <BellIcon />
         </IconButton>
         <IconButton label="Help">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-            <path d="M8 1a7 7 0 110 14A7 7 0 018 1zm0 10.2a.9.9 0 100 1.8.9.9 0 000-1.8zM8 3.8c-1.5 0-2.5.9-2.5 2.1h1.3c0-.6.5-1 1.2-1s1.2.4 1.2 1c0 .7-.4 1-1.1 1.4-.8.5-1.3 1-1.3 2v.4h1.3v-.3c0-.5.3-.8 1.1-1.3.9-.6 1.5-1.2 1.5-2.3C9.7 4.6 8.9 3.8 8 3.8z" />
-          </svg>
+          <HelpIcon />
         </IconButton>
         <IconButton label="Settings">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-            <path d="M6.5 1h3l.4 1.6a5 5 0 011.4.8L13 2.8l2 2-1.6 1.7c.2.45.3.9.3 1.4 0 .5-.1.95-.3 1.4L15 11l-2 2-1.7-1.6a5 5 0 01-1.4.8L9.5 15h-3l-.4-1.6a5 5 0 01-1.4-.8L3 13l-2-2 1.6-1.7A5 5 0 012.3 8c0-.5.1-.95.3-1.4L1 5l2-2 1.7 1.6a5 5 0 011.4-.8L6.5 1zM8 5.5A2.5 2.5 0 108 10.5 2.5 2.5 0 008 5.5z" />
-          </svg>
+          <SettingsIcon />
         </IconButton>
 
-        <button type="button" className={styles.menuButton} aria-label="Regions">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 1.2a5.8 5.8 0 110 11.6A5.8 5.8 0 018 2.2zM1.5 7.4h13v1.2h-13V7.4z" />
-          </svg>
+        <button type="button" className={styles.regionButton} aria-label="Regions">
           Global
           <ChevronDown />
         </button>
 
-        <button type="button" className={styles.menuButton} aria-label="Account">
-          {CONSOLE_ACCOUNT.displayName} ({CONSOLE_ACCOUNT.accountId})
-          <ChevronDown />
+        <button type="button" className={styles.accountButton} aria-label="Account menu">
+          <span>
+            <span className={styles.accountPrimary}>
+              {CONSOLE_ACCOUNT.displayName} ({CONSOLE_ACCOUNT.accountId})
+              <ChevronDown />
+            </span>
+            <span className={styles.accountSecondary}>
+              {CONSOLE_ACCOUNT.displayName}
+            </span>
+          </span>
         </button>
       </div>
     </header>

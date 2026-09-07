@@ -1,19 +1,21 @@
 /**
  * AWS Console visual tokens — tuned to match Route 53 screenshots.
- * Cloudscape defaults lean blue; console primary actions are orange.
  */
 :root {
-  --aws-header-bg: #232f3e;
-  --aws-header-hover: #37475a;
-  --aws-footer-bg: #232f3e;
+  --aws-header-bg: #151d26;
+  --aws-header-hover: #2a3441;
+  --aws-header-search-bg: #0f141a;
+  --aws-header-search-border: #3f4b5b;
+  --aws-header-account-bg: #2a3441;
+  --aws-footer-bg: #151d26;
   --aws-orange: #ff9900;
   --aws-orange-hover: #ec7211;
   --aws-orange-active: #eb5f07;
-  --aws-link: #0073bb;
-  --aws-link-hover: #005a9c;
-  --aws-border: #eaeded;
-  --aws-text: #16191f;
-  --aws-text-secondary: #545b64;
+  --aws-link: #0972d3;
+  --aws-link-hover: #033a70;
+  --aws-border: #e9ebed;
+  --aws-text: #0f141a;
+  --aws-text-secondary: #5f6b7a;
   --aws-nav-active: #0972d3;
   --aws-page-bg: #ffffff;
   --aws-sidebar-width: 280px;

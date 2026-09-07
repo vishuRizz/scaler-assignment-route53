@@ -1,37 +1,45 @@
 .topNav {
   display: flex;
   align-items: center;
-  gap: 8px;
   height: 40px;
-  padding: 0 12px;
+  padding: 0 12px 0 4px;
   background: var(--aws-header-bg);
-  color: #ffffff;
+  color: #f1f3f3;
   flex-shrink: 0;
   z-index: 1000;
+  gap: 0;
 }
 
-.left,
-.right {
+.left {
   display: flex;
   align-items: center;
-  gap: 4px;
   flex-shrink: 0;
+  height: 100%;
 }
 
 .center {
   flex: 1;
   display: flex;
-  justify-content: center;
+  align-items: center;
   min-width: 0;
-  padding: 0 16px;
+  padding: 0 8px 0 10px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .logoLink {
   display: inline-flex;
   align-items: center;
-  height: 32px;
-  padding: 0 6px;
-  border-radius: 2px;
+  justify-content: center;
+  height: 100%;
+  padding: 0 10px 0 8px;
+  border-radius: 0;
   text-decoration: none;
 }
 
@@ -45,18 +53,50 @@
   width: auto;
 }
 
+.divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.22);
+  flex-shrink: 0;
+  margin: 0 2px;
+}
+
+.qButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.qButton:hover {
+  background: var(--aws-header-hover);
+}
+
+.qIcon {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+
 .iconButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 100%;
   border: none;
-  border-radius: 2px;
+  border-radius: 0;
   background: transparent;
-  color: #d5dbdb;
+  color: #d1d5db;
   cursor: pointer;
   padding: 0;
+  flex-shrink: 0;
 }
 
 .iconButton:hover {
@@ -64,42 +104,32 @@
   color: #ffffff;
 }
 
-.menuButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 32px;
-  width: auto;
-  gap: 6px;
-  padding: 0 8px;
-  border: none;
-  border-radius: 2px;
-  background: transparent;
-  color: #d5dbdb;
-  cursor: pointer;
-  font-size: 13px;
-  white-space: nowrap;
-}
-
-.menuButton:hover {
-  background: var(--aws-header-hover);
-  color: #ffffff;
-}
-
-.menuButton svg {
-  flex-shrink: 0;
+.iconButton svg {
+  display: block;
 }
 
 .search {
   display: flex;
   align-items: center;
-  width: min(640px, 100%);
+  width: 100%;
+  max-width: 680px;
   height: 28px;
-  background: #ffffff;
-  border-radius: 2px;
-  padding: 0 10px;
+  background: var(--aws-header-search-bg);
+  border: 1px solid var(--aws-header-search-border);
+  border-radius: 8px;
+  padding: 0 8px 0 10px;
   gap: 8px;
-  color: #545b64;
+  color: #9ba3af;
+}
+
+.search:focus-within {
+  border-color: #7d8998;
+}
+
+.searchIcon,
+.historyIcon {
+  flex-shrink: 0;
+  color: #9ba3af;
 }
 
 .searchInput {
@@ -108,21 +138,115 @@
   outline: none;
   background: transparent;
   font-size: 13px;
-  color: #16191f;
+  line-height: 1;
+  color: #f1f3f3;
   min-width: 0;
+  padding: 0;
 }
 
 .searchInput::placeholder {
-  color: #687078;
+  color: #9ba3af;
+}
+
+/* hide native search clear on webkit so layout stays stable */
+.searchInput::-webkit-search-decoration,
+.searchInput::-webkit-search-cancel-button,
+.searchInput::-webkit-search-results-button,
+.searchInput::-webkit-search-results-decoration {
+  display: none;
 }
 
 .shortcut {
+  display: inline-flex;
+  align-items: center;
   font-size: 11px;
   line-height: 1;
   padding: 3px 6px;
-  border-radius: 2px;
-  background: #f2f3f3;
-  color: #545b64;
-  border: 1px solid #d5dbdb;
+  border-radius: 4px;
+  background: transparent;
+  color: #9ba3af;
+  border: 1px solid #4b5563;
   white-space: nowrap;
+  font-family: inherit;
+  font-weight: 400;
+}
+
+.historyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #9ba3af;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.historyButton:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.regionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #f1f3f3;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.regionButton:hover {
+  background: var(--aws-header-hover);
+}
+
+.accountButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 10px;
+  margin-left: 2px;
+  border: none;
+  border-radius: 8px;
+  background: var(--aws-header-account-bg);
+  color: #f1f3f3;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.15;
+}
+
+.accountButton:hover {
+  background: #364455;
+}
+
+.accountPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.accountSecondary {
+  display: block;
+  font-size: 11px;
+  color: #c6cbd2;
+  white-space: nowrap;
+}
+
+.chevron {
+  opacity: 0.85;
+  flex-shrink: 0;
 }

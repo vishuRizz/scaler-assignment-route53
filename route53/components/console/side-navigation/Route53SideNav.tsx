@@ -2,7 +2,6 @@
 
 import SideNavigation from "@cloudscape-design/components/side-navigation";
 import { usePathname, useRouter } from "next/navigation";
-import { APP_NAME } from "@/lib/constants/console";
 import { route53NavItems } from "@/lib/constants/navigation";
 
 type Route53SideNavProps = {
@@ -10,7 +9,9 @@ type Route53SideNavProps = {
 };
 
 /**
- * Route 53 left navigation — structure mirrors the AWS console sidebar.
+ * Route 53 left nav links.
+ * Service title ("Route 53") lives in ConsoleShell sidebar header,
+ * so this component only renders the item list.
  */
 export function Route53SideNav({ onFollow }: Route53SideNavProps) {
   const pathname = usePathname();
@@ -18,7 +19,6 @@ export function Route53SideNav({ onFollow }: Route53SideNavProps) {
 
   return (
     <SideNavigation
-      header={{ href: "/hosted-zones", text: APP_NAME }}
       activeHref={pathname}
       items={route53NavItems}
       onFollow={(event) => {

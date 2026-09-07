@@ -34,7 +34,6 @@ export function HostedZonesPage() {
 
   return (
     <ConsoleShell
-      contentType="table"
       breadcrumbs={
         <BreadcrumbGroup
           items={[
@@ -45,7 +44,7 @@ export function HostedZonesPage() {
         />
       }
     >
-      <SpaceBetween size="l">
+      <SpaceBetween size="m">
         <HostedZonesHeader
           count={zones.length}
           hasSelection={hasSingleSelection}
