@@ -15,7 +15,7 @@ export const route53NavItems: SideNavigationProps.Item[] = [
   {
     type: "section",
     text: "Global Resolver",
-    defaultExpanded: false,
+    defaultExpanded: true,
     items: [
       {
         type: "link",
@@ -34,7 +34,7 @@ export const route53NavItems: SideNavigationProps.Item[] = [
   {
     type: "section",
     text: "VPC Resolver",
-    defaultExpanded: false,
+    defaultExpanded: true,
     items: [
       { type: "link", text: "VPCs", href: "/vpc-resolver/vpcs" },
       {
@@ -58,7 +58,7 @@ export const route53NavItems: SideNavigationProps.Item[] = [
   {
     type: "section",
     text: "Domains",
-    defaultExpanded: false,
+    defaultExpanded: true,
     items: [
       {
         type: "link",
@@ -71,7 +71,7 @@ export const route53NavItems: SideNavigationProps.Item[] = [
   {
     type: "section",
     text: "IP-based routing",
-    defaultExpanded: false,
+    defaultExpanded: true,
     items: [
       {
         type: "link",
@@ -83,7 +83,7 @@ export const route53NavItems: SideNavigationProps.Item[] = [
   {
     type: "section",
     text: "Traffic flow",
-    defaultExpanded: false,
+    defaultExpanded: true,
     items: [
       {
         type: "link",

@@ -179,8 +179,8 @@ export function TopNav() {
             className={styles.logoImage}
             src="/assets/aws-logo.svg"
             alt="AWS"
-            width={44}
-            height={24}
+            width={37}
+            height={20}
             priority
           />
         </a>
@@ -214,7 +214,7 @@ export function TopNav() {
             placeholder="Search"
             aria-label="Search"
           />
-          <kbd className={styles.shortcut}>Option+S</kbd>
+          <span className={styles.shortcut}>[Option+S]</span>
           <button
             type="button"
             className={styles.historyButton}

@@ -30,20 +30,23 @@
 
 .sidebarHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 8px;
-  min-height: 40px;
-  padding: 4px 8px 4px 16px;
+  min-height: 44px;
+  /* Match Cloudscape SideNavigation link text inset; sit lower toward the list */
+  padding: 16px 4px 6px 28px;
   flex-shrink: 0;
 }
 
 .sidebarTitle {
-  font-size: 16px;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  line-height: 22px;
   font-weight: 700;
+  -webkit-font-smoothing: antialiased;
   color: #0f141a;
   text-decoration: none;
-  line-height: 1.3;
 }
 
 .sidebarTitle:hover {
@@ -54,14 +57,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 16px;
+  height: 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 2px;
   background: transparent;
   color: #5f6b7a;
   cursor: pointer;
   padding: 0;
+  flex-shrink: 0;
 }
 
 .collapseButton:hover {
@@ -73,6 +77,8 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
+  /* Pull list up slightly so title sits closer to Dashboard */
+  margin-top: -2px;
 }
 
 .content {

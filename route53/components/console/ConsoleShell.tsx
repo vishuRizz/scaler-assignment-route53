@@ -54,9 +54,9 @@ export function ConsoleShell({
                 aria-label="Close side navigation"
                 onClick={() => setNavigationOpen(false)}
               >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+                <svg width="16" height="20" viewBox="0 0 16 20" fill="none" aria-hidden>
                   <path
-                    d="M10 3.5L5.5 8L10 12.5"
+                    d="M10 4L5.5 10L10 16"
                     stroke="currentColor"
                     strokeWidth="1.5"
                     strokeLinecap="round"
