@@ -11,6 +11,7 @@ import { AccountDropdown } from "./AccountDropdown";
 import { ConsoleSearch, type ConsoleSearchHandle } from "./ConsoleSearch";
 import { NotificationsDropdown } from "./NotificationsDropdown";
 import { RegionDropdown } from "./RegionDropdown";
+import { SettingsDropdown } from "./SettingsDropdown";
 import styles from "./TopNav.module.css";
 
 function IconButton({
@@ -181,13 +182,16 @@ export function TopNav() {
   const [accountOpen, setAccountOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
   const regionRef = useRef<HTMLDivElement>(null);
+  const settingsRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<ConsoleSearchHandle>(null);
   const menuId = useId();
   const notificationsId = useId();
   const regionId = useId();
+  const settingsId = useId();
   const { session } = useAuth();
   const { open: amazonQOpen, toggle: toggleAmazonQ } = useAmazonQ();
   const notifications = useNotifications();
@@ -195,7 +199,9 @@ export function TopNav() {
   const accountId = session?.accountId ?? CONSOLE_ACCOUNT.accountId;
 
   useEffect(() => {
-    if (!accountOpen && !notificationsOpen && !regionOpen) return;
+    if (!accountOpen && !notificationsOpen && !regionOpen && !settingsOpen) {
+      return;
+    }
 
     function onPointerDown(event: MouseEvent) {
       const target = event.target as Node;
@@ -220,6 +226,13 @@ export function TopNav() {
       ) {
         setRegionOpen(false);
       }
+      if (
+        settingsOpen &&
+        settingsRef.current &&
+        !settingsRef.current.contains(target)
+      ) {
+        setSettingsOpen(false);
+      }
     }
 
     function onKeyDown(event: KeyboardEvent) {
@@ -227,6 +240,7 @@ export function TopNav() {
         setAccountOpen(false);
         setNotificationsOpen(false);
         setRegionOpen(false);
+        setSettingsOpen(false);
       }
     }
 
@@ -236,7 +250,7 @@ export function TopNav() {
       document.removeEventListener("mousedown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [accountOpen, notificationsOpen, regionOpen]);
+  }, [accountOpen, notificationsOpen, regionOpen, settingsOpen]);
 
   return (
     <header className={styles.topNav} role="banner">
@@ -264,6 +278,7 @@ export function TopNav() {
             setAccountOpen(false);
             setNotificationsOpen(false);
             setRegionOpen(false);
+            setSettingsOpen(false);
           }}
         >
           <Image
@@ -313,6 +328,7 @@ export function TopNav() {
               setNotificationsOpen((open) => !open);
               setAccountOpen(false);
               setRegionOpen(false);
+              setSettingsOpen(false);
             }}
           >
             <BellIcon />
@@ -328,9 +344,22 @@ export function TopNav() {
             <HelpIcon />
           </IconButton>
           <Divider />
-          <IconButton label="Settings">
-            <SettingsIcon />
-          </IconButton>
+          <div className={styles.settingsCluster} ref={settingsRef}>
+            <IconButton
+              label="Settings"
+              active={settingsOpen}
+              controls={settingsId}
+              onClick={() => {
+                setSettingsOpen((open) => !open);
+                setAccountOpen(false);
+                setNotificationsOpen(false);
+                setRegionOpen(false);
+              }}
+            >
+              <SettingsIcon />
+            </IconButton>
+            {settingsOpen ? <SettingsDropdown id={settingsId} /> : null}
+          </div>
           <Divider />
           <div className={styles.regionCluster} ref={regionRef}>
             <button
@@ -343,6 +372,7 @@ export function TopNav() {
                 setRegionOpen((open) => !open);
                 setAccountOpen(false);
                 setNotificationsOpen(false);
+                setSettingsOpen(false);
               }}
             >
               Global
@@ -364,6 +394,7 @@ export function TopNav() {
                 setAccountOpen((open) => !open);
                 setNotificationsOpen(false);
                 setRegionOpen(false);
+                setSettingsOpen(false);
               }}
             >
               {displayName} ({accountId})
@@ -382,6 +413,7 @@ export function TopNav() {
               setAccountOpen((open) => !open);
               setNotificationsOpen(false);
               setRegionOpen(false);
+              setSettingsOpen(false);
             }}
           >
             More

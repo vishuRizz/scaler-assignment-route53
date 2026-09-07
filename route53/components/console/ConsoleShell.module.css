@@ -12,7 +12,7 @@
   min-height: 0;
   display: flex;
   flex-direction: row;
-  background: #ffffff;
+  background: var(--aws-page-bg);
 }
 
 .mainColumn {
@@ -31,7 +31,7 @@
   min-height: 0;
   display: flex;
   flex-direction: row;
-  background: #ffffff;
+  background: var(--aws-surface);
 }
 
 .sidebar {
@@ -39,7 +39,7 @@
   flex-shrink: 0;
   border-right: 1px solid var(--aws-border);
   overflow: auto;
-  background: #ffffff;
+  background: var(--aws-surface);
   display: flex;
   flex-direction: column;
 }
@@ -61,7 +61,7 @@
   line-height: 22px;
   font-weight: 700;
   -webkit-font-smoothing: antialiased;
-  color: #0f141a;
+  color: var(--aws-text);
   text-decoration: none;
   background: none;
   border: none;
@@ -71,7 +71,7 @@
 }
 
 .sidebarTitle:hover {
-  color: #0972d3;
+  color: var(--aws-nav-active);
 }
 
 .collapseButton {
@@ -90,8 +90,8 @@
 }
 
 .collapseButton:hover {
-  background: #f2f3f3;
-  color: #0f141a;
+  background: var(--aws-surface-secondary);
+  color: var(--aws-text);
 }
 
 .sidebarNav {
@@ -107,12 +107,13 @@
   min-width: 0;
   min-height: 0;
   overflow: auto;
-  background: #ffffff;
+  background: var(--aws-surface);
+  color: var(--aws-text);
   padding: 16px 20px 24px;
 }
 
 .contentForm {
-  background: #f2f3f3;
+  background: var(--aws-surface-secondary);
 }
 
 .contentLoading {
@@ -120,7 +121,7 @@
   align-items: center;
   justify-content: center;
   min-height: 240px;
-  color: #5f6b7a;
+  color: var(--aws-text-secondary);
   font-size: 14px;
 }
 
@@ -129,7 +130,7 @@
   flex-shrink: 0;
   border-left: 1px solid var(--aws-border);
   overflow: auto;
-  background: #ffffff;
+  background: var(--aws-surface);
   padding: 16px;
 }
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CloudscapeTheme } from "@/components/console/CloudscapeTheme";
 import { AuthProvider } from "@/lib/auth/AuthProvider";
+import { ThemeProvider } from "@/lib/theme/ThemeProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,11 +20,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" style={{ minHeight: "100%" }}>
+    <html lang="en" style={{ minHeight: "100%" }} suppressHydrationWarning>
       <body style={{ minHeight: "100%", overflowY: "auto" }}>
-        <CloudscapeTheme>
-          <AuthProvider>{children}</AuthProvider>
-        </CloudscapeTheme>
+        <ThemeProvider>
+          <CloudscapeTheme>
+            <AuthProvider>{children}</AuthProvider>
+          </CloudscapeTheme>
+        </ThemeProvider>
       </body>
     </html>
   );

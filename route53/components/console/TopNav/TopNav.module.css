@@ -265,6 +265,14 @@
   height: 100%;
 }
 
+.settingsCluster {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  align-self: stretch;
+  height: 100%;
+}
+
 /**
  * AWS account chrome: gray tab hangs from top of nav,
  * federated username sits under it in sky blue, right-aligned.

@@ -1,7 +1,8 @@
 /**
  * AWS Console visual tokens — tuned to match Route 53 screenshots.
  */
-:root {
+:root,
+html[data-visual-mode="light"] {
   --aws-header-bg: #151d26;
   --aws-header-hover: #2a3441;
   --aws-header-search-bg: #0f141a;
@@ -18,6 +19,8 @@
   --aws-text-secondary: #5f6b7a;
   --aws-nav-active: #0972d3;
   --aws-page-bg: #ffffff;
+  --aws-surface: #ffffff;
+  --aws-surface-secondary: #f2f3f3;
   --aws-sidebar-width: 280px;
 
   /* Cloudscape primary button hashed tokens → #ff9903 + black text */
@@ -30,6 +33,24 @@
   --color-text-button-primary-default-2i01k6: #16191f;
   --color-text-button-primary-hover-xtd6ag: #16191f;
   --color-text-button-primary-active-dkwkja: #16191f;
+}
+
+html[data-visual-mode="dark"] {
+  --aws-header-bg: #151d26;
+  --aws-header-hover: #2a3441;
+  --aws-header-search-bg: #0f141a;
+  --aws-header-search-border: #5f6b7a;
+  --aws-header-account-bg: #2a3441;
+  --aws-footer-bg: #151d26;
+  --aws-link: #44b9d6;
+  --aws-link-hover: #7ec8e3;
+  --aws-border: #2a3441;
+  --aws-text: #f1f3f3;
+  --aws-text-secondary: #aab7b8;
+  --aws-nav-active: #44b9d6;
+  --aws-page-bg: #131920;
+  --aws-surface: #151d26;
+  --aws-surface-secondary: #1b232d;
 }
 
 html,
