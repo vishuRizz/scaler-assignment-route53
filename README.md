@@ -2,8 +2,6 @@
 
 Functional clone of the AWS Route 53 console: auth, hosted zones, and DNS record CRUD with a FastAPI backend and persistent storage. UI/UX targets Cloudscape (AWS console) look and feel.
 
-> **Note:** The assignment specifies SQLite. This project uses **MySQL** (Aiven or any MySQL-compatible host) via SQLAlchemy + PyMySQL. Schema and API behavior match the assignment scope.
-
 ## Live demo
 
 **App:** [https://route53.vishu.app](https://route53.vishu.app)
