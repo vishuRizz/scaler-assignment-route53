@@ -1,6 +1,7 @@
 # Ignore everything in this repo root...
 /*
 
-# ...except the app and this file
+# ...except the app, backend, and this file
 !/.gitignore
 !/route53/
+!/backend/
