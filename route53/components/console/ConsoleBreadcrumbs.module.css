@@ -43,11 +43,13 @@
   line-height: 20px;
   cursor: pointer;
   white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 .link:hover {
   color: #033d8b;
-  text-decoration: underline;
 }
 
 .current {
