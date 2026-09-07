@@ -22,6 +22,7 @@ import {
   type SearchCategoryId,
   type SearchItem,
 } from "@/lib/search/types";
+import { useAmazonQ } from "@/lib/amazon-q/AmazonQContext";
 import styles from "./ConsoleSearch.module.css";
 
 const PREVIEW_LIMIT = 3;
@@ -112,6 +113,7 @@ export type ConsoleSearchHandle = {
 export const ConsoleSearch = forwardRef<ConsoleSearchHandle, ConsoleSearchProps>(
   function ConsoleSearch({ className }, ref) {
   const router = useRouter();
+  const { setOpen: setAmazonQOpen } = useAmazonQ();
   const panelId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -217,7 +219,15 @@ export const ConsoleSearch = forwardRef<ConsoleSearchHandle, ConsoleSearchProps>
           onKeyDown={onInputKeyDown}
         />
         {open ? (
-          <button type="button" className={styles.askQ} aria-label="Ask Amazon Q">
+          <button
+            type="button"
+            className={styles.askQ}
+            aria-label="Ask Amazon Q"
+            onClick={() => {
+              setAmazonQOpen(true);
+              setOpen(false);
+            }}
+          >
             <Image
               src="/assets/amazon-q.svg"
               alt=""

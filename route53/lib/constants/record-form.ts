@@ -68,13 +68,13 @@ export function valuePlaceholder(type: DnsRecordType): string {
     case "CNAME":
       return "www.example.com";
     case "MX":
-      return "10 mail.example.com";
+      return "mail.example.com";
     case "TXT":
       return '"Sample Text Entry"';
     case "NS":
       return "ns-1.example.com";
     case "SRV":
-      return "10 5 5060 sipserver.example.com";
+      return "sipserver.example.com";
     case "CAA":
       return '0 issue "amazon.com"';
     case "PTR":
@@ -86,11 +86,125 @@ export function valuePlaceholder(type: DnsRecordType): string {
   }
 }
 
+export type MxParts = { priority: string; host: string };
+export type SrvParts = {
+  priority: string;
+  weight: string;
+  port: string;
+  target: string;
+};
+
+export function parseMxValue(value: string): MxParts {
+  const trimmed = value.trim();
+  const match = trimmed.match(/^(\d+)\s+(.+)$/);
+  if (match) return { priority: match[1], host: match[2].trim() };
+  return { priority: "10", host: trimmed };
+}
+
+export function composeMxValue(priority: string, host: string): string {
+  return `${priority.trim() || "10"} ${host.trim()}`.trim();
+}
+
+export function parseSrvValue(value: string): SrvParts {
+  const trimmed = value.trim();
+  const match = trimmed.match(/^(\d+)\s+(\d+)\s+(\d+)\s+(.+)$/);
+  if (match) {
+    return {
+      priority: match[1],
+      weight: match[2],
+      port: match[3],
+      target: match[4].trim(),
+    };
+  }
+  return { priority: "10", weight: "5", port: "5060", target: trimmed };
+}
+
+export function composeSrvValue(
+  priority: string,
+  weight: string,
+  port: string,
+  target: string,
+): string {
+  return [
+    priority.trim() || "10",
+    weight.trim() || "0",
+    port.trim() || "0",
+    target.trim(),
+  ].join(" ");
+}
+
+export type RecordValueParts = {
+  value: string;
+  mxPriority: string;
+  srvPriority: string;
+  srvWeight: string;
+  srvPort: string;
+};
+
+export function emptyValueParts(): RecordValueParts {
+  return {
+    value: "",
+    mxPriority: "10",
+    srvPriority: "10",
+    srvWeight: "5",
+    srvPort: "5060",
+  };
+}
+
+export function parseRecordValueParts(
+  type: DnsRecordType,
+  raw: string,
+): RecordValueParts {
+  if (type === "MX") {
+    const mx = parseMxValue(raw);
+    return {
+      ...emptyValueParts(),
+      mxPriority: mx.priority,
+      value: mx.host,
+    };
+  }
+  if (type === "SRV") {
+    const srv = parseSrvValue(raw);
+    return {
+      ...emptyValueParts(),
+      srvPriority: srv.priority,
+      srvWeight: srv.weight,
+      srvPort: srv.port,
+      value: srv.target,
+    };
+  }
+  return { ...emptyValueParts(), value: raw };
+}
+
+export function composeRecordValue(
+  type: DnsRecordType,
+  parts: RecordValueParts,
+): string {
+  if (type === "MX") return composeMxValue(parts.mxPriority, parts.value);
+  if (type === "SRV") {
+    return composeSrvValue(
+      parts.srvPriority,
+      parts.srvWeight,
+      parts.srvPort,
+      parts.value,
+    );
+  }
+  return parts.value.trim();
+}
+
 export function buildRecordFqdn(subdomain: string, zoneName: string): string {
   const clean = subdomain.trim().replace(/\.$/, "");
   if (!clean) return zoneName;
   if (clean === zoneName || clean.endsWith(`.${zoneName}`)) return clean;
   return `${clean}.${zoneName}`;
+}
+
+export function subdomainFromFqdn(fqdn: string, zoneName: string): string {
+  const name = fqdn.replace(/\.$/, "");
+  const zone = zoneName.replace(/\.$/, "");
+  if (name === zone) return "";
+  if (name.endsWith(`.${zone}`)) return name.slice(0, -(zone.length + 1));
+  return name;
 }
 
 export function toRoutingPolicy(value: string | undefined): RoutingPolicy {

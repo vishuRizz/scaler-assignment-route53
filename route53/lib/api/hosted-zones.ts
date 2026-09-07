@@ -11,6 +11,7 @@ import {
 } from "@/lib/api/cache";
 import { mapHostedZone, type ApiHostedZone } from "@/lib/api/mappers";
 import { getToken } from "@/lib/auth/session-storage";
+import { notifyConsoleActivity } from "@/lib/notifications/store";
 import type { HostedZone, HostedZoneType } from "@/lib/types/hosted-zone";
 
 function requireToken(): string {
@@ -78,6 +79,12 @@ export async function createHostedZone(input: {
   const zone = mapHostedZone(row);
   setHostedZoneCache(zone);
   invalidateZoneList();
+  notifyConsoleActivity({
+    action: "created",
+    resource: "Hosted zone",
+    name: zone.name,
+    href: `/hosted-zones/${zone.id}`,
+  });
   return zone;
 }
 
@@ -93,15 +100,27 @@ export async function updateHostedZone(
   });
   const zone = mapHostedZone(row);
   setHostedZoneCache(zone);
+  notifyConsoleActivity({
+    action: "updated",
+    resource: "Hosted zone",
+    name: zone.name,
+    href: `/hosted-zones/${zone.id}`,
+  });
   return zone;
 }
 
 export async function deleteHostedZone(id: string): Promise<void> {
   const token = requireToken();
+  const existing = peekHostedZone(id);
   await apiFetch<{ message: string }>(`/hosted-zones/${id}`, {
     method: "DELETE",
     token,
   });
   invalidateHostedZone(id);
   invalidateZoneList();
+  notifyConsoleActivity({
+    action: "deleted",
+    resource: "Hosted zone",
+    name: existing?.name ?? id,
+  });
 }

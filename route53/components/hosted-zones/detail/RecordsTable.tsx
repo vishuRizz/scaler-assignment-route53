@@ -111,6 +111,7 @@ type RecordsTableProps = {
   loading?: boolean;
   onRefresh: () => void;
   onCreate: () => void;
+  onEditSelected?: (record: DnsRecord) => void;
   onDeleteSelected?: (records: DnsRecord[]) => void;
 };
 
@@ -119,6 +120,7 @@ export function RecordsTable({
   loading = false,
   onRefresh,
   onCreate,
+  onEditSelected,
   onDeleteSelected,
 }: RecordsTableProps) {
   const [selectedItems, setSelectedItems] = useState<DnsRecord[]>([]);
@@ -219,6 +221,16 @@ export function RecordsTable({
                 ariaLabel="Refresh"
                 onClick={onRefresh}
               />
+              <Button
+                disabled={selectedItems.length !== 1}
+                onClick={() => {
+                  if (selectedItems.length === 1) {
+                    onEditSelected?.(selectedItems[0]);
+                  }
+                }}
+              >
+                Edit record
+              </Button>
               <Button
                 disabled={selectedItems.length === 0}
                 onClick={() => onDeleteSelected?.(selectedItems)}

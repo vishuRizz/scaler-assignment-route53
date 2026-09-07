@@ -12,7 +12,6 @@ import Link from "@cloudscape-design/components/link";
 import Select, { type SelectProps } from "@cloudscape-design/components/select";
 import SpaceBetween from "@cloudscape-design/components/space-between";
 import Table from "@cloudscape-design/components/table";
-import Textarea from "@cloudscape-design/components/textarea";
 import Toggle from "@cloudscape-design/components/toggle";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -23,15 +22,18 @@ import {
   ROUTING_POLICY_OPTIONS,
   TTL_PRESETS,
   buildRecordFqdn,
+  composeRecordValue,
+  emptyValueParts,
   toRecordType,
   toRoutingPolicy,
-  valuePlaceholder,
+  type RecordValueParts,
 } from "@/lib/constants/record-form";
 import { createRecords, listRecords } from "@/lib/api/records";
 import { peekHostedZone, peekRecords } from "@/lib/api/cache";
 import { getHostedZone } from "@/lib/api/hosted-zones";
 import type { DnsRecord, DnsRecordType } from "@/lib/types/dns-record";
 import type { HostedZone } from "@/lib/types/hosted-zone";
+import { RecordValueFields } from "./RecordValueFields";
 import styles from "./CreateRecordPage.module.css";
 
 type DraftRecord = {
@@ -39,7 +41,7 @@ type DraftRecord = {
   subdomain: string;
   type: SelectProps.Option;
   alias: boolean;
-  value: string;
+  valueParts: RecordValueParts;
   ttl: string;
   routingPolicy: SelectProps.Option;
   expanded: boolean;
@@ -60,7 +62,7 @@ function newDraft(): DraftRecord {
     subdomain: "",
     type: RECORD_TYPE_OPTIONS[0],
     alias: false,
-    value: "",
+    valueParts: emptyValueParts(),
     ttl: "300",
     routingPolicy: ROUTING_POLICY_OPTIONS[0],
     expanded: true,
@@ -133,9 +135,32 @@ export function CreateRecordPage() {
 
     let hasError = false;
     const next = drafts.map((draft) => {
-      if (!draft.alias && !draft.value.trim()) {
+      const recordType = toRecordType(draft.type.value);
+      const composed = composeRecordValue(recordType, draft.valueParts);
+      if (!draft.alias && !composed.trim()) {
         hasError = true;
         return { ...draft, valueError: "Value is required." };
+      }
+      if (
+        !draft.alias &&
+        recordType === "MX" &&
+        !draft.valueParts.mxPriority.trim()
+      ) {
+        hasError = true;
+        return { ...draft, valueError: "Priority is required." };
+      }
+      if (
+        !draft.alias &&
+        recordType === "SRV" &&
+        (!draft.valueParts.srvPriority.trim() ||
+          !draft.valueParts.srvWeight.trim() ||
+          !draft.valueParts.srvPort.trim())
+      ) {
+        hasError = true;
+        return {
+          ...draft,
+          valueError: "Priority, weight, and port are required.",
+        };
       }
       return { ...draft, valueError: undefined };
     });
@@ -147,14 +172,17 @@ export function CreateRecordPage() {
     try {
       await createRecords(
         zone.id,
-        next.map((draft) => ({
-          name: buildRecordFqdn(draft.subdomain, zone.name),
-          type: toRecordType(draft.type.value),
-          routingPolicy: toRoutingPolicy(draft.routingPolicy.value),
-          alias: draft.alias,
-          value: draft.value,
-          ttl: draft.alias ? null : Number(draft.ttl) || 300,
-        })),
+        next.map((draft) => {
+          const recordType = toRecordType(draft.type.value);
+          return {
+            name: buildRecordFqdn(draft.subdomain, zone.name),
+            type: recordType,
+            routingPolicy: toRoutingPolicy(draft.routingPolicy.value),
+            alias: draft.alias,
+            value: composeRecordValue(recordType, draft.valueParts),
+            ttl: draft.alias ? null : Number(draft.ttl) || 300,
+          };
+        }),
       );
       router.push(`/hosted-zones/${zone.id}?recordCreated=1`);
     } catch (err) {
@@ -286,7 +314,7 @@ export function CreateRecordPage() {
                             onChange={({ detail }) =>
                               updateDraft(draft.id, {
                                 type: detail.selectedOption,
-                                value: "",
+                                valueParts: emptyValueParts(),
                                 valueError: undefined,
                               })
                             }
@@ -308,35 +336,18 @@ export function CreateRecordPage() {
                         Alias
                       </Toggle>
 
-                      <FormField
-                        label={
-                          <span>
-                            Value <InfoLink />
-                          </span>
-                        }
-                        description={
-                          draft.alias
-                            ? "Choose or enter an AWS resource alias target."
-                            : "Enter multiple values on separate lines."
-                        }
+                      <RecordValueFields
+                        type={recordType}
+                        alias={draft.alias}
+                        parts={draft.valueParts}
                         errorText={draft.valueError}
-                      >
-                        <Textarea
-                          value={draft.value}
-                          onChange={({ detail }) =>
-                            updateDraft(draft.id, {
-                              value: detail.value,
-                              valueError: undefined,
-                            })
-                          }
-                          placeholder={
-                            draft.alias
-                              ? "Alias target (e.g. dualstack.example.elb.amazonaws.com)"
-                              : valuePlaceholder(recordType)
-                          }
-                          rows={4}
-                        />
-                      </FormField>
+                        onChange={(patch) =>
+                          updateDraft(draft.id, {
+                            valueParts: { ...draft.valueParts, ...patch },
+                            valueError: undefined,
+                          })
+                        }
+                      />
 
                       <div className={styles.twoCol}>
                         <FormField

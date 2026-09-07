@@ -1,7 +1,7 @@
 .root {
   position: relative;
   width: 100%;
-  max-width: 720px;
+  max-width: 480px;
 }
 
 .rootOpen {
@@ -14,11 +14,12 @@
   width: 100%;
   height: 32px;
   background: var(--aws-header-search-bg, #232f3e);
-  border: 1px solid var(--aws-header-search-border, #545b64);
+  border: 1.5px solid #aab3bd;
   border-radius: 8px;
   padding: 0 8px 0 10px;
   gap: 8px;
   color: #a4a4ad;
+  box-sizing: border-box;
 }
 
 .searchBarOpen {

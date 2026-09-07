@@ -42,6 +42,7 @@ export function HostedZoneDetailPage() {
   const [showCreatedFlash, setShowCreatedFlash] = useState(false);
   const [showUpdatedFlash, setShowUpdatedFlash] = useState(false);
   const [showRecordCreatedFlash, setShowRecordCreatedFlash] = useState(false);
+  const [showRecordUpdatedFlash, setShowRecordUpdatedFlash] = useState(false);
   const [showRecordDeletedFlash, setShowRecordDeletedFlash] = useState(false);
   const [deleteZoneOpen, setDeleteZoneOpen] = useState(false);
   const [recordsToDelete, setRecordsToDelete] = useState<DnsRecord[]>([]);
@@ -107,10 +108,12 @@ export function HostedZoneDetailPage() {
     const created = searchParams.get("created") === "1";
     const updated = searchParams.get("updated") === "1";
     const recordCreated = searchParams.get("recordCreated") === "1";
-    if (created || updated || recordCreated) {
+    const recordUpdated = searchParams.get("recordUpdated") === "1";
+    if (created || updated || recordCreated || recordUpdated) {
       if (created) setShowCreatedFlash(true);
       if (updated) setShowUpdatedFlash(true);
       if (recordCreated) setShowRecordCreatedFlash(true);
+      if (recordUpdated) setShowRecordUpdatedFlash(true);
       router.replace(`/hosted-zones/${zoneId}`, { scroll: false });
     }
   }, [searchParams, zoneId, router]);
@@ -155,6 +158,16 @@ export function HostedZoneDetailPage() {
         id: "records-created",
       });
     }
+    if (showRecordUpdatedFlash) {
+      items.push({
+        type: "success",
+        dismissible: true,
+        dismissLabel: "Dismiss",
+        onDismiss: () => setShowRecordUpdatedFlash(false),
+        content: "Record was successfully updated.",
+        id: "record-updated",
+      });
+    }
     if (showRecordDeletedFlash) {
       items.push({
         type: "success",
@@ -180,6 +193,7 @@ export function HostedZoneDetailPage() {
     showCreatedFlash,
     showUpdatedFlash,
     showRecordCreatedFlash,
+    showRecordUpdatedFlash,
     showRecordDeletedFlash,
     actionError,
     zone,
@@ -246,6 +260,11 @@ export function HostedZoneDetailPage() {
                   }
                   onCreate={() =>
                     router.push(`/hosted-zones/${zone.id}/records/create`)
+                  }
+                  onEditSelected={(selected) =>
+                    router.push(
+                      `/hosted-zones/${zone.id}/records/${selected.id}/edit`,
+                    )
                   }
                   onDeleteSelected={(selected) => setRecordsToDelete(selected)}
                 />

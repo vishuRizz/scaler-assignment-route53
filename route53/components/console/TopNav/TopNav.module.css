@@ -23,6 +23,7 @@
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   min-width: 0;
   padding: 0 12px 0 12px;
 }
@@ -76,7 +77,8 @@
   flex-shrink: 0;
 }
 
-.qButton:hover {
+.qButton:hover,
+.qButtonActive {
   background: var(--aws-header-hover);
 }
 
@@ -90,6 +92,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   width: 40px;
   height: 100%;
   border: none;
@@ -106,22 +109,53 @@
   color: #ffffff;
 }
 
+.iconButtonActive {
+  background: var(--aws-header-hover);
+  color: #7ec8e3;
+}
+
 .iconButton svg {
   display: block;
+}
+
+.notificationsCluster {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  align-self: stretch;
+  height: 100%;
+}
+
+.notifBadge {
+  position: absolute;
+  top: 8px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: #d13212;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .search {
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 720px;
+  max-width: 480px;
   height: 32px;
   background: var(--aws-header-search-bg);
-  border: 1px solid var(--aws-header-search-border);
+  border: 1.5px solid var(--aws-header-search-border);
   border-radius: 8px;
   padding: 0 8px 0 10px;
   gap: 8px;
   color: #a4a4ad;
+  box-sizing: border-box;
 }
 
 .search:focus-within {
@@ -317,6 +351,7 @@
 
 .searchDesktop {
   width: 100%;
+  max-width: 480px;
 }
 
 @media (max-width: 767px) {

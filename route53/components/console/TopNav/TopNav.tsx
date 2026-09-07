@@ -4,20 +4,43 @@ import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import { CONSOLE_ACCOUNT } from "@/lib/constants/console";
 import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAmazonQ } from "@/lib/amazon-q/AmazonQContext";
+import { useNotifications } from "@/lib/notifications/useNotifications";
 import { AccountDropdown } from "./AccountDropdown";
 import { ConsoleSearch, type ConsoleSearchHandle } from "./ConsoleSearch";
+import { NotificationsDropdown } from "./NotificationsDropdown";
 import styles from "./TopNav.module.css";
 
 function IconButton({
   label,
   children,
+  onClick,
+  active,
+  controls,
+  badge,
 }: {
   label: string;
   children: React.ReactNode;
+  onClick?: () => void;
+  active?: boolean;
+  controls?: string;
+  badge?: number;
 }) {
   return (
-    <button type="button" className={styles.iconButton} aria-label={label}>
+    <button
+      type="button"
+      className={`${styles.iconButton}${active ? ` ${styles.iconButtonActive}` : ""}`}
+      aria-label={label}
+      aria-expanded={active}
+      aria-controls={controls}
+      onClick={onClick}
+    >
       {children}
+      {badge && badge > 0 ? (
+        <span className={styles.notifBadge} aria-hidden>
+          {badge > 9 ? "9+" : badge}
+        </span>
+      ) : null}
     </button>
   );
 }
@@ -154,27 +177,44 @@ function SettingsIcon() {
  */
 export function TopNav() {
   const [accountOpen, setAccountOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement>(null);
+  const notificationsRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<ConsoleSearchHandle>(null);
   const menuId = useId();
+  const notificationsId = useId();
   const { session } = useAuth();
+  const { open: amazonQOpen, toggle: toggleAmazonQ } = useAmazonQ();
+  const notifications = useNotifications();
   const displayName = session?.displayName ?? CONSOLE_ACCOUNT.displayName;
   const accountId = session?.accountId ?? CONSOLE_ACCOUNT.accountId;
 
   useEffect(() => {
-    if (!accountOpen) return;
+    if (!accountOpen && !notificationsOpen) return;
 
     function onPointerDown(event: MouseEvent) {
+      const target = event.target as Node;
       if (
+        accountOpen &&
         accountMenuRef.current &&
-        !accountMenuRef.current.contains(event.target as Node)
+        !accountMenuRef.current.contains(target)
       ) {
         setAccountOpen(false);
+      }
+      if (
+        notificationsOpen &&
+        notificationsRef.current &&
+        !notificationsRef.current.contains(target)
+      ) {
+        setNotificationsOpen(false);
       }
     }
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setAccountOpen(false);
+      if (event.key === "Escape") {
+        setAccountOpen(false);
+        setNotificationsOpen(false);
+      }
     }
 
     document.addEventListener("mousedown", onPointerDown);
@@ -183,7 +223,7 @@ export function TopNav() {
       document.removeEventListener("mousedown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [accountOpen]);
+  }, [accountOpen, notificationsOpen]);
 
   return (
     <header className={styles.topNav} role="banner">
@@ -201,7 +241,17 @@ export function TopNav() {
 
         <Divider />
 
-        <button type="button" className={styles.qButton} aria-label="Amazon Q">
+        <button
+          type="button"
+          className={`${styles.qButton}${amazonQOpen ? ` ${styles.qButtonActive}` : ""}`}
+          aria-label="Amazon Q"
+          aria-pressed={amazonQOpen}
+          onClick={() => {
+            toggleAmazonQ();
+            setAccountOpen(false);
+            setNotificationsOpen(false);
+          }}
+        >
           <Image
             className={styles.qIcon}
             src="/assets/amazon-q.svg"
@@ -239,9 +289,23 @@ export function TopNav() {
           <CloudShellIcon />
         </IconButton>
         <Divider />
-        <IconButton label="Notifications">
-          <BellIcon />
-        </IconButton>
+        <div className={styles.notificationsCluster} ref={notificationsRef}>
+          <IconButton
+            label="Notifications"
+            active={notificationsOpen}
+            controls={notificationsId}
+            badge={notifications.length}
+            onClick={() => {
+              setNotificationsOpen((open) => !open);
+              setAccountOpen(false);
+            }}
+          >
+            <BellIcon />
+          </IconButton>
+          {notificationsOpen ? (
+            <NotificationsDropdown id={notificationsId} />
+          ) : null}
+        </div>
 
         <span className={styles.desktopOnly}>
           <Divider />
@@ -267,7 +331,10 @@ export function TopNav() {
               aria-label="Account menu"
               aria-expanded={accountOpen}
               aria-controls={menuId}
-              onClick={() => setAccountOpen((open) => !open)}
+              onClick={() => {
+                setAccountOpen((open) => !open);
+                setNotificationsOpen(false);
+              }}
             >
               {displayName} ({accountId})
               <Caret pointUp={accountOpen} />
@@ -281,7 +348,10 @@ export function TopNav() {
             aria-label="More"
             aria-expanded={accountOpen}
             aria-controls={menuId}
-            onClick={() => setAccountOpen((open) => !open)}
+            onClick={() => {
+              setAccountOpen((open) => !open);
+              setNotificationsOpen(false);
+            }}
           >
             More
             <Caret pointUp={accountOpen} />
