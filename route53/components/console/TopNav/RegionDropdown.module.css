@@ -1,0 +1,143 @@
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 2000;
+  width: 320px;
+  max-height: min(640px, calc(100vh - 56px));
+  display: flex;
+  flex-direction: column;
+  background: #161d27;
+  border: 1px solid #3f4b5b;
+  border-radius: 2px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  color: #f1f3f3;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 10px 10px 0;
+  flex-shrink: 0;
+}
+
+.tab {
+  height: 32px;
+  border: none;
+  border-radius: 16px;
+  background: transparent;
+  color: #d5dbdb;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tabActive {
+  background: #2a3441;
+  color: #44b9d6;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px 0 4px;
+}
+
+.group {
+  padding: 8px 0 4px;
+}
+
+.groupTitle {
+  margin: 0;
+  padding: 6px 14px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #aab7b8;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.regionRow {
+  display: grid;
+  grid-template-columns: 16px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 14px;
+  border: none;
+  background: transparent;
+  color: #aab7b8;
+  text-align: left;
+  cursor: not-allowed;
+  font: inherit;
+}
+
+.regionRow:disabled {
+  opacity: 1;
+}
+
+.lock {
+  color: #7d8998;
+  flex-shrink: 0;
+}
+
+.regionName {
+  color: #d5dbdb;
+  font-size: 13px;
+}
+
+.regionId {
+  color: #7d8998;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.empty {
+  margin: 28px 16px;
+  text-align: center;
+  color: #aab7b8;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid #2a3441;
+  flex-shrink: 0;
+}
+
+.footer a {
+  color: #44b9d6;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+  color: #7ec8e3;
+}
+
+@media (max-width: 767px) {
+  .dropdown {
+    position: fixed;
+    top: 48px;
+    right: 8px;
+    width: min(320px, calc(100vw - 16px));
+  }
+}

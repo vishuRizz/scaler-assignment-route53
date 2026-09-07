@@ -251,8 +251,18 @@
   white-space: nowrap;
 }
 
-.regionButton:hover {
+.regionButton:hover,
+.regionButtonOpen {
   background: var(--aws-header-hover);
+  color: #7ec8e3;
+}
+
+.regionCluster {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  align-self: stretch;
+  height: 100%;
 }
 
 /**
