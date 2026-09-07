@@ -10,8 +10,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ConsolePage } from "@/components/console/ConsolePage";
 import { DeleteHostedZoneModal } from "@/components/hosted-zones/DeleteHostedZoneModal";
 import { DeleteRecordsModal } from "@/components/hosted-zones/records/DeleteRecordsModal";
-import { deleteRecords, listRecords } from "@/lib/mock/dns-records";
-import { deleteHostedZone, getHostedZone } from "@/lib/mock/hosted-zones";
+import { peekHostedZone, peekRecords } from "@/lib/api/cache";
+import { deleteHostedZone, getHostedZone } from "@/lib/api/hosted-zones";
+import { deleteRecords, listRecords } from "@/lib/api/records";
 import type { DnsRecord } from "@/lib/types/dns-record";
 import type { HostedZone } from "@/lib/types/hosted-zone";
 import { HostedZoneDetailHeader } from "./HostedZoneDetailHeader";
@@ -28,21 +29,60 @@ export function HostedZoneDetailPage() {
   const router = useRouter();
   const zoneId = params.id;
 
-  const [zone, setZone] = useState<HostedZone | undefined>(undefined);
-  const [records, setRecords] = useState<DnsRecord[]>([]);
-  const [ready, setReady] = useState(false);
+  const [zone, setZone] = useState<HostedZone | null | undefined>(() =>
+    peekHostedZone(zoneId),
+  );
+  const [records, setRecords] = useState<DnsRecord[]>(
+    () => peekRecords(zoneId) ?? [],
+  );
+  const [ready, setReady] = useState(() => Boolean(peekHostedZone(zoneId)));
   const [showCreatedFlash, setShowCreatedFlash] = useState(false);
   const [showUpdatedFlash, setShowUpdatedFlash] = useState(false);
   const [showRecordCreatedFlash, setShowRecordCreatedFlash] = useState(false);
   const [showRecordDeletedFlash, setShowRecordDeletedFlash] = useState(false);
   const [deleteZoneOpen, setDeleteZoneOpen] = useState(false);
   const [recordsToDelete, setRecordsToDelete] = useState<DnsRecord[]>([]);
+  const [actionError, setActionError] = useState<string | null>(null);
+
+  const refresh = useCallback(
+    async (options?: { fresh?: boolean }) => {
+      const [nextZone, nextRecords] = await Promise.all([
+        getHostedZone(zoneId, { fresh: options?.fresh }),
+        listRecords(zoneId, { fresh: options?.fresh }),
+      ]);
+      setZone(nextZone);
+      setRecords(nextZone ? nextRecords : []);
+      return nextZone;
+    },
+    [zoneId],
+  );
 
   useEffect(() => {
-    setZone(getHostedZone(zoneId));
-    setRecords(listRecords(zoneId));
-    setReady(true);
-  }, [zoneId]);
+    let cancelled = false;
+    const cachedZone = peekHostedZone(zoneId);
+    const cachedRecords = peekRecords(zoneId);
+    if (cachedZone) {
+      setZone(cachedZone);
+      setRecords(cachedRecords ?? []);
+      setReady(true);
+    }
+
+    void (async () => {
+      try {
+        const nextZone = await refresh({ fresh: Boolean(cachedZone) });
+        if (cancelled) return;
+        if (!nextZone && !cachedZone) setZone(null);
+      } catch {
+        if (!cancelled && !peekHostedZone(zoneId)) setZone(null);
+      } finally {
+        if (!cancelled) setReady(true);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [refresh, zoneId]);
 
   useEffect(() => {
     const created = searchParams.get("created") === "1";
@@ -56,10 +96,10 @@ export function HostedZoneDetailPage() {
     }
   }, [searchParams, zoneId, router]);
 
-  const refresh = useCallback(() => {
-    setZone(getHostedZone(zoneId));
-    setRecords(listRecords(zoneId));
-  }, [zoneId]);
+  const nameServers = useMemo(() => {
+    const nsRecord = records.find((r) => r.type === "NS");
+    return nsRecord?.value.split("\n").filter(Boolean) ?? [];
+  }, [records]);
 
   const flashItems: FlashbarProps.MessageDefinition[] = useMemo(() => {
     if (!zone) return [];
@@ -106,36 +146,45 @@ export function HostedZoneDetailPage() {
         id: "records-deleted",
       });
     }
+    if (actionError) {
+      items.push({
+        type: "error",
+        dismissible: true,
+        dismissLabel: "Dismiss",
+        onDismiss: () => setActionError(null),
+        content: actionError,
+        id: "action-error",
+      });
+    }
     return items;
   }, [
     showCreatedFlash,
     showUpdatedFlash,
     showRecordCreatedFlash,
     showRecordDeletedFlash,
+    actionError,
     zone,
   ]);
 
-  if (!ready) {
+  const crumbs = [
+    { text: "Route 53", href: "/hosted-zones" },
+    { text: "Hosted zones", href: "/hosted-zones" },
+    ...(zone
+      ? [{ text: zone.name, href: `/hosted-zones/${zone.id}` }]
+      : []),
+  ];
+
+  if (!ready && !zone) {
     return (
-      <ConsolePage
-        breadcrumbItems={[
-          { text: "Route 53", href: "/hosted-zones" },
-          { text: "Hosted zones", href: "/hosted-zones" },
-        ]}
-      >
+      <ConsolePage breadcrumbItems={crumbs}>
         <Box color="text-body-secondary">Loading...</Box>
       </ConsolePage>
     );
   }
 
-  if (!zone) {
+  if (ready && !zone) {
     return (
-      <ConsolePage
-        breadcrumbItems={[
-          { text: "Route 53", href: "/hosted-zones" },
-          { text: "Hosted zones", href: "/hosted-zones" },
-        ]}
-      >
+      <ConsolePage breadcrumbItems={crumbs}>
         <Alert type="error" header="Hosted zone not found">
           This hosted zone does not exist or is no longer available.{" "}
           <Button variant="link" onClick={() => router.push("/hosted-zones")}>
@@ -146,14 +195,10 @@ export function HostedZoneDetailPage() {
     );
   }
 
+  if (!zone) return null;
+
   return (
-    <ConsolePage
-      breadcrumbItems={[
-        { text: "Route 53", href: "/hosted-zones" },
-        { text: "Hosted zones", href: "/hosted-zones" },
-        { text: zone.name, href: `/hosted-zones/${zone.id}` },
-      ]}
-    >
+    <ConsolePage breadcrumbItems={crumbs}>
       <div className={styles.page}>
         {flashItems.length > 0 ? <Flashbar items={flashItems} /> : null}
 
@@ -164,6 +209,7 @@ export function HostedZoneDetailPage() {
 
         <HostedZoneDetailsExpandable
           zone={zone}
+          nameServers={nameServers}
           onEdit={() => router.push(`/hosted-zones/${zone.id}/edit`)}
         />
 
@@ -175,7 +221,7 @@ export function HostedZoneDetailPage() {
               content: (
                 <RecordsTable
                   records={records}
-                  onRefresh={refresh}
+                  onRefresh={() => void refresh({ fresh: true })}
                   onCreate={() =>
                     router.push(`/hosted-zones/${zone.id}/records/create`)
                   }
@@ -219,9 +265,19 @@ export function HostedZoneDetailPage() {
         visible={deleteZoneOpen}
         onDismiss={() => setDeleteZoneOpen(false)}
         onConfirm={(target) => {
-          deleteHostedZone(target.id);
-          setDeleteZoneOpen(false);
-          router.push("/hosted-zones");
+          void (async () => {
+            try {
+              await deleteHostedZone(target.id);
+              setDeleteZoneOpen(false);
+              router.push("/hosted-zones");
+            } catch (err) {
+              setActionError(
+                err instanceof Error
+                  ? err.message
+                  : "Failed to delete hosted zone.",
+              );
+            }
+          })();
         }}
       />
 
@@ -230,13 +286,23 @@ export function HostedZoneDetailPage() {
         visible={recordsToDelete.length > 0}
         onDismiss={() => setRecordsToDelete([])}
         onConfirm={(selected) => {
-          deleteRecords(
-            zone.id,
-            selected.map((record) => record.id),
-          );
-          setRecordsToDelete([]);
-          setShowRecordDeletedFlash(true);
-          refresh();
+          void (async () => {
+            try {
+              await deleteRecords(
+                zone.id,
+                selected.map((record) => record.id),
+              );
+              setRecordsToDelete([]);
+              setShowRecordDeletedFlash(true);
+              await refresh({ fresh: true });
+            } catch (err) {
+              setActionError(
+                err instanceof Error
+                  ? err.message
+                  : "Failed to delete records.",
+              );
+            }
+          })();
         }}
       />
     </ConsolePage>

@@ -3,12 +3,13 @@
 import Flashbar, { type FlashbarProps } from "@cloudscape-design/components/flashbar";
 import Link from "@cloudscape-design/components/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ConsolePage } from "@/components/console/ConsolePage";
+import { peekZoneList } from "@/lib/api/cache";
 import {
   deleteHostedZone,
   listHostedZones,
-} from "@/lib/mock/hosted-zones";
+} from "@/lib/api/hosted-zones";
 import type { HostedZone } from "@/lib/types/hosted-zone";
 import { DeleteHostedZoneModal } from "./DeleteHostedZoneModal";
 import { HostedZonesHeader } from "./HostedZonesHeader";
@@ -20,20 +21,42 @@ import styles from "./HostedZonesPage.module.css";
  */
 export function HostedZonesPage() {
   const router = useRouter();
-  const [zones, setZones] = useState<HostedZone[]>([]);
+  const [zones, setZones] = useState<HostedZone[]>(() => peekZoneList() ?? []);
   const [selectedItems, setSelectedItems] = useState<HostedZone[]>([]);
   const [deleteTarget, setDeleteTarget] = useState<HostedZone | null>(null);
   const [flashItems, setFlashItems] = useState<FlashbarProps.MessageDefinition[]>(
     [],
   );
+  const [loading, setLoading] = useState(() => !peekZoneList());
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setZones(listHostedZones());
-  }, []);
-
-  const refresh = useCallback(() => {
-    setZones(listHostedZones());
-    setSelectedItems([]);
+    let cancelled = false;
+    void (async () => {
+      const cached = peekZoneList();
+      if (cached) {
+        setZones(cached);
+        setLoading(false);
+      } else {
+        setLoading(true);
+      }
+      setError(null);
+      try {
+        const data = await listHostedZones({ fresh: Boolean(cached) });
+        if (!cancelled) setZones(data);
+      } catch (err) {
+        if (!cancelled && !peekZoneList()?.length) {
+          setError(
+            err instanceof Error ? err.message : "Failed to load hosted zones.",
+          );
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const goCreate = () => {
@@ -44,20 +67,35 @@ export function HostedZonesPage() {
   const hasSingleSelection = selectedItems.length === 1;
   const selectedCount = selectedItems.length;
 
-  const handleDeleteConfirm = (zone: HostedZone) => {
-    deleteHostedZone(zone.id);
-    setDeleteTarget(null);
-    refresh();
-    setFlashItems([
-      {
-        type: "success",
-        dismissible: true,
-        dismissLabel: "Dismiss",
-        onDismiss: () => setFlashItems([]),
-        content: `Successfully deleted hosted zone ${zone.name}.`,
-        id: "zone-deleted",
-      },
-    ]);
+  const handleDeleteConfirm = async (zone: HostedZone) => {
+    try {
+      await deleteHostedZone(zone.id);
+      setDeleteTarget(null);
+      setZones((prev) => prev.filter((item) => item.id !== zone.id));
+      setSelectedItems([]);
+      setFlashItems([
+        {
+          type: "success",
+          dismissible: true,
+          dismissLabel: "Dismiss",
+          onDismiss: () => setFlashItems([]),
+          content: `Successfully deleted hosted zone ${zone.name}.`,
+          id: "zone-deleted",
+        },
+      ]);
+    } catch (err) {
+      setFlashItems([
+        {
+          type: "error",
+          dismissible: true,
+          dismissLabel: "Dismiss",
+          onDismiss: () => setFlashItems([]),
+          content:
+            err instanceof Error ? err.message : "Failed to delete hosted zone.",
+          id: "zone-delete-error",
+        },
+      ]);
+    }
   };
 
   return (
@@ -69,12 +107,39 @@ export function HostedZonesPage() {
     >
       <div className={styles.page}>
         {flashItems.length > 0 ? <Flashbar items={flashItems} /> : null}
+        {error ? (
+          <Flashbar
+            items={[
+              {
+                type: "error",
+                content: error,
+                id: "zones-load-error",
+                dismissible: true,
+                onDismiss: () => setError(null),
+              },
+            ]}
+          />
+        ) : null}
 
         <div className={styles.headerBlock}>
           <HostedZonesHeader
             count={zones.length}
             hasSelection={hasSingleSelection}
-            onRefresh={refresh}
+            onRefresh={() => {
+              void (async () => {
+                try {
+                  const data = await listHostedZones({ fresh: true });
+                  setZones(data);
+                  setSelectedItems([]);
+                } catch (err) {
+                  setError(
+                    err instanceof Error
+                      ? err.message
+                      : "Failed to load hosted zones.",
+                  );
+                }
+              })();
+            }}
             onCreate={goCreate}
             onViewDetails={() => {
               if (selected) router.push(`/hosted-zones/${selected.id}`);
@@ -93,6 +158,7 @@ export function HostedZonesPage() {
             <Link href="#" fontSize="body-s">
               To change modes go to settings.
             </Link>
+            {loading && zones.length === 0 ? " Loading…" : null}
           </p>
         </div>
 
@@ -125,7 +191,7 @@ export function HostedZonesPage() {
         zone={deleteTarget}
         visible={Boolean(deleteTarget)}
         onDismiss={() => setDeleteTarget(null)}
-        onConfirm={handleDeleteConfirm}
+        onConfirm={(zone) => void handleDeleteConfirm(zone)}
       />
     </ConsolePage>
   );

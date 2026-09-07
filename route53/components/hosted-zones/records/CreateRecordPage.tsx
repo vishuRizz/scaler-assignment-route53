@@ -27,8 +27,9 @@ import {
   toRoutingPolicy,
   valuePlaceholder,
 } from "@/lib/constants/record-form";
-import { createRecords, listRecords } from "@/lib/mock/dns-records";
-import { getHostedZone } from "@/lib/mock/hosted-zones";
+import { createRecords, listRecords } from "@/lib/api/records";
+import { peekHostedZone, peekRecords } from "@/lib/api/cache";
+import { getHostedZone } from "@/lib/api/hosted-zones";
 import type { DnsRecord, DnsRecordType } from "@/lib/types/dns-record";
 import type { HostedZone } from "@/lib/types/hosted-zone";
 import styles from "./CreateRecordPage.module.css";
@@ -74,16 +75,45 @@ export function CreateRecordPage() {
   const router = useRouter();
   const zoneId = params.id;
 
-  const [zone, setZone] = useState<HostedZone | undefined>(undefined);
-  const [existing, setExisting] = useState<DnsRecord[]>([]);
-  const [ready, setReady] = useState(false);
+  const [zone, setZone] = useState<HostedZone | null | undefined>(() =>
+    peekHostedZone(zoneId),
+  );
+  const [existing, setExisting] = useState<DnsRecord[]>(
+    () => peekRecords(zoneId) ?? [],
+  );
+  const [loadingZone, setLoadingZone] = useState(() => !peekHostedZone(zoneId));
   const [drafts, setDrafts] = useState<DraftRecord[]>([newDraft()]);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
-    setZone(getHostedZone(zoneId));
-    setExisting(listRecords(zoneId));
-    setReady(true);
+    let cancelled = false;
+    const cached = peekHostedZone(zoneId);
+    if (cached) {
+      setZone(cached);
+      setExisting(peekRecords(zoneId) ?? []);
+      setLoadingZone(false);
+    }
+
+    void (async () => {
+      try {
+        const [found, records] = await Promise.all([
+          getHostedZone(zoneId, { fresh: Boolean(cached) }),
+          listRecords(zoneId, { fresh: Boolean(peekRecords(zoneId)) }),
+        ]);
+        if (cancelled) return;
+        setZone(found);
+        setExisting(found ? records : []);
+      } catch {
+        if (!cancelled && !peekHostedZone(zoneId)) setZone(null);
+      } finally {
+        if (!cancelled) setLoadingZone(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [zoneId]);
 
   const updateDraft = (id: string, patch: Partial<DraftRecord>) => {
@@ -98,7 +128,7 @@ export function CreateRecordPage() {
 
   const goBack = () => router.push(`/hosted-zones/${zoneId}`);
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!zone) return;
 
     let hasError = false;
@@ -113,69 +143,72 @@ export function CreateRecordPage() {
     if (hasError) return;
 
     setSubmitting(true);
-    createRecords(
-      next.map((draft) => ({
-        hostedZoneId: zone.id,
-        name: buildRecordFqdn(draft.subdomain, zone.name),
-        type: toRecordType(draft.type.value),
-        routingPolicy: toRoutingPolicy(draft.routingPolicy.value),
-        alias: draft.alias,
-        value: draft.value,
-        ttl: draft.alias ? null : Number(draft.ttl) || 300,
-      })),
-    );
-    router.push(`/hosted-zones/${zone.id}?recordCreated=1`);
+    setSubmitError(null);
+    try {
+      await createRecords(
+        zone.id,
+        next.map((draft) => ({
+          name: buildRecordFqdn(draft.subdomain, zone.name),
+          type: toRecordType(draft.type.value),
+          routingPolicy: toRoutingPolicy(draft.routingPolicy.value),
+          alias: draft.alias,
+          value: draft.value,
+          ttl: draft.alias ? null : Number(draft.ttl) || 300,
+        })),
+      );
+      router.push(`/hosted-zones/${zone.id}?recordCreated=1`);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Failed to create records.",
+      );
+      setSubmitting(false);
+    }
   };
 
-  if (!ready) {
-    return (
-      <ConsolePage
-        contentType="form"
-        navigationOpenByDefault={false}
-        breadcrumbItems={[
-          { text: "Route 53", href: "/hosted-zones" },
-          { text: "Hosted zones", href: "/hosted-zones" },
-        ]}
-      >
-        <Box color="text-body-secondary">Loading...</Box>
-      </ConsolePage>
-    );
-  }
-
-  if (!zone) {
-    return (
-      <ConsolePage
-        contentType="form"
-        navigationOpenByDefault={false}
-        breadcrumbItems={[
-          { text: "Route 53", href: "/hosted-zones" },
-          { text: "Hosted zones", href: "/hosted-zones" },
-        ]}
-      >
-        <Alert type="error" header="Hosted zone not found">
-          <Button variant="link" onClick={() => router.push("/hosted-zones")}>
-            Back to Hosted zones
-          </Button>
-        </Alert>
-      </ConsolePage>
-    );
-  }
+  const breadcrumbItems = [
+    { text: "Route 53", href: "/hosted-zones" },
+    { text: "Hosted zones", href: "/hosted-zones" },
+    ...(zone
+      ? [
+          { text: zone.name, href: `/hosted-zones/${zone.id}` },
+          {
+            text: "Create record",
+            href: `/hosted-zones/${zone.id}/records/create`,
+          },
+        ]
+      : [
+          {
+            text: "Create record",
+            href: `/hosted-zones/${zoneId}/records/create`,
+          },
+        ]),
+  ];
 
   return (
     <ConsolePage
       contentType="form"
       navigationOpenByDefault={false}
-      breadcrumbItems={[
-        { text: "Route 53", href: "/hosted-zones" },
-        { text: "Hosted zones", href: "/hosted-zones" },
-        { text: zone.name, href: `/hosted-zones/${zone.id}` },
-        { text: "Create record", href: `/hosted-zones/${zone.id}/records/create` },
-      ]}
+      breadcrumbItems={breadcrumbItems}
     >
+      {loadingZone && !zone ? (
+        <Box color="text-body-secondary">Loading...</Box>
+      ) : !zone ? (
+        <Alert type="error" header="Hosted zone not found">
+          <Button variant="link" onClick={() => router.push("/hosted-zones")}>
+            Back to Hosted zones
+          </Button>
+        </Alert>
+      ) : (
       <div className={styles.page}>
         <Header variant="h1" info={<InfoLink />}>
           Create record
         </Header>
+
+        {submitError ? (
+          <Alert type="error" header="Could not create records">
+            {submitError}
+          </Alert>
+        ) : null}
 
         <div className={styles.stack}>
           <Container
@@ -426,13 +459,14 @@ export function CreateRecordPage() {
           <Button
             variant="primary"
             loading={submitting}
-            onClick={handleCreate}
+            onClick={() => void handleCreate()}
             style={awsPrimaryButtonStyle}
           >
             Create records
           </Button>
         </div>
       </div>
+      )}
     </ConsolePage>
   );
 }

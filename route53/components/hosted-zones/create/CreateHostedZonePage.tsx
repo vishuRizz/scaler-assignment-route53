@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ConsolePage } from "@/components/console/ConsolePage";
 import { awsPrimaryButtonStyle } from "@/lib/constants/button-styles";
-import { createHostedZone } from "@/lib/mock/hosted-zones";
+import { createHostedZone } from "@/lib/api/hosted-zones";
 import type { HostedZoneType } from "@/lib/types/hosted-zone";
 import {
   HostedZoneConfigSection,
@@ -31,7 +31,7 @@ export function CreateHostedZonePage() {
 
   const goBack = () => router.push("/hosted-zones");
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     const trimmed = domainName.trim();
     if (!trimmed) {
       setDomainError("Domain name is required.");
@@ -39,12 +39,19 @@ export function CreateHostedZonePage() {
     }
     setDomainError(undefined);
     setSubmitting(true);
-    const zone = createHostedZone({
-      name: trimmed,
-      description,
-      type: zoneType,
-    });
-    router.push(`/hosted-zones/${zone.id}?created=1`);
+    try {
+      const zone = await createHostedZone({
+        name: trimmed,
+        description,
+        type: zoneType,
+      });
+      router.push(`/hosted-zones/${zone.id}?created=1`);
+    } catch (err) {
+      setDomainError(
+        err instanceof Error ? err.message : "Failed to create hosted zone.",
+      );
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -108,7 +115,7 @@ export function CreateHostedZonePage() {
           <Button
             variant="primary"
             loading={submitting}
-            onClick={handleCreate}
+            onClick={() => void handleCreate()}
             style={awsPrimaryButtonStyle}
           >
             Create hosted zone

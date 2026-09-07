@@ -11,7 +11,7 @@ type Step = "identify" | "password" | "register";
 
 /**
  * Classic AWS Management Console sign-in (Root user / IAM user).
- * Credentials persist in localStorage until the FastAPI + Aiven backend lands.
+ * Talks to the FastAPI backend; session token is kept in localStorage.
  */
 export function SignInPage() {
   const router = useRouter();
@@ -25,6 +25,7 @@ export function SignInPage() {
   const [iamUser, setIamUser] = useState<string>(DEMO_CREDENTIALS.displayName);
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (ready && session) {
@@ -44,33 +45,40 @@ export function SignInPage() {
     setStep("password");
   };
 
-  const handleRootSignIn = (event: FormEvent) => {
+  const handleRootSignIn = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+    setBusy(true);
     try {
-      signInRoot(email, password);
+      await signInRoot(email, password);
       goConsole();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign in failed.");
+    } finally {
+      setBusy(false);
     }
   };
 
-  const handleIamSignIn = (event: FormEvent) => {
+  const handleIamSignIn = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+    setBusy(true);
     try {
-      signInIam(accountId, iamUser, password);
+      await signInIam(accountId, iamUser, password);
       goConsole();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign in failed.");
+    } finally {
+      setBusy(false);
     }
   };
 
-  const handleRegister = (event: FormEvent) => {
+  const handleRegister = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+    setBusy(true);
     try {
-      register({
+      await register({
         email,
         password,
         displayName: displayName || email.split("@")[0],
@@ -78,6 +86,8 @@ export function SignInPage() {
       goConsole();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not create account.");
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -107,8 +117,7 @@ export function SignInPage() {
           <form onSubmit={handleRegister}>
             <h1 className={styles.title}>Create account</h1>
             <p className={styles.hint}>
-              Mock sign-up — saved in this browser&apos;s localStorage (swap for
-              Aiven later).
+              Creates an account on the Route 53 clone API.
             </p>
             {error ? <p className={styles.error}>{error}</p> : null}
             <div className={styles.field}>
@@ -149,8 +158,12 @@ export function SignInPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <button type="submit" className={styles.primaryButton}>
-              Create account and sign in
+            <button
+              type="submit"
+              className={styles.primaryButton}
+              disabled={busy}
+            >
+              {busy ? "Creating…" : "Create account and sign in"}
             </button>
             <hr className={styles.divider} />
             <div className={styles.footerLinks}>
@@ -289,8 +302,12 @@ export function SignInPage() {
                   user <code>{DEMO_CREDENTIALS.displayName}</code>, password{" "}
                   <code>{DEMO_CREDENTIALS.password}</code>
                 </p>
-                <button type="submit" className={styles.primaryButton}>
-                  Sign in
+                <button
+                  type="submit"
+                  className={styles.primaryButton}
+                  disabled={busy}
+                >
+                  {busy ? "Signing in…" : "Sign in"}
                 </button>
               </>
             )}
@@ -329,8 +346,12 @@ export function SignInPage() {
                 autoFocus
               />
             </div>
-            <button type="submit" className={styles.primaryButton}>
-              Sign in
+            <button
+              type="submit"
+              className={styles.primaryButton}
+              disabled={busy}
+            >
+              {busy ? "Signing in…" : "Sign in"}
             </button>
             <hr className={styles.divider} />
             <div className={styles.footerLinks}>

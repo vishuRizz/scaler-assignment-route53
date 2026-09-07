@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, type ReactNode } from "react";
+import { useLayoutEffect, useMemo, type ReactNode } from "react";
 import { ConsoleBreadcrumbs } from "@/components/console/ConsoleBreadcrumbs";
 import {
   useConsoleChromeContext,
@@ -38,7 +38,8 @@ export function ConsolePage({
     [breadcrumbKey],
   );
 
-  useEffect(() => {
+  // Before paint so form pages don't flash an open sidebar from the previous route.
+  useLayoutEffect(() => {
     setChrome({ breadcrumbs, contentType, navigationOpenByDefault });
   }, [breadcrumbs, contentType, navigationOpenByDefault, setChrome]);
 

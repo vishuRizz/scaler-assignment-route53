@@ -55,9 +55,11 @@ export function AccountDropdown({ id, onSignedOut }: AccountDropdownProps) {
     session?.accountIdFormatted ?? CONSOLE_ACCOUNT.accountIdFormatted;
 
   const handleSignOut = () => {
-    signOut();
-    onSignedOut?.();
-    router.replace("/signin");
+    void (async () => {
+      await signOut();
+      onSignedOut?.();
+      router.replace("/signin");
+    })();
   };
 
   return (

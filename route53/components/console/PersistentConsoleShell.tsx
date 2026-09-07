@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { BreadcrumbStrip } from "@/components/console/BreadcrumbStrip/BreadcrumbStrip";
 import { ConsoleFooter } from "@/components/console/ConsoleFooter/ConsoleFooter";
 import { Route53SideNav } from "@/components/console/side-navigation/Route53SideNav";
@@ -40,8 +40,8 @@ function ContentAuthGate({ children }: { children: ReactNode }) {
 
   if (!ready) {
     return (
-      <div className={styles.contentLoading} role="status">
-        Loading...
+      <div className={styles.contentLoading} role="status" aria-live="polite">
+        {/* Keep shell chrome; avoid a second full-page loading flash */}
       </div>
     );
   }
@@ -64,12 +64,19 @@ function ConsoleShellInner({ children }: { children: ReactNode }) {
   const [navigationOpen, setNavigationOpen] = useState(
     () => navigationOpenByDefault,
   );
+  const prevNavDefault = useRef(navigationOpenByDefault);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isPhone) {
       setNavigationOpen(false);
-    } else {
+      prevNavDefault.current = navigationOpenByDefault;
+      return;
+    }
+    // Only sync when the page's preferred default changes (e.g. list → form),
+    // so we don't fight manual open/close mid-page.
+    if (prevNavDefault.current !== navigationOpenByDefault) {
       setNavigationOpen(navigationOpenByDefault);
+      prevNavDefault.current = navigationOpenByDefault;
     }
   }, [isPhone, navigationOpenByDefault]);
 
