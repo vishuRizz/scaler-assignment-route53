@@ -22,13 +22,15 @@ export function RequireAuth({ children }: { children: ReactNode }) {
       <div
         style={{
           minHeight: "100vh",
-          background: "#232f3e",
+          background: "var(--aws-page-bg, #131920)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#d5dbdb",
+          color: "var(--aws-text-secondary, #aab7b8)",
           fontSize: 14,
         }}
+        role="status"
+        aria-live="polite"
       >
         Loading...
       </div>

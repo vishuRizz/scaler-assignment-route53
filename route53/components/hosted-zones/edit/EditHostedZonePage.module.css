@@ -7,6 +7,6 @@
 .readOnlyValue {
   font-size: 14px;
   line-height: 1.4;
-  color: #0f141a;
+  color: var(--aws-text);
   word-break: break-word;
 }

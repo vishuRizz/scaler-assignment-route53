@@ -17,14 +17,14 @@
   justify-content: space-between;
   min-height: 44px;
   padding: 0 20px;
-  background: #f2f3f3;
-  border-top: 1px solid #d5dbdb;
+  background: var(--aws-surface-secondary);
+  border-top: 1px solid var(--aws-border);
   font-size: 14px;
   font-weight: 700;
-  color: #16191f;
+  color: var(--aws-text);
 }
 
 .selectionChevron {
   display: inline-flex;
-  color: #5f6b7a;
+  color: var(--aws-text-secondary);
 }

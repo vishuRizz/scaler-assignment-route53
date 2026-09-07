@@ -41,7 +41,7 @@
 .domainSuffix {
   flex-shrink: 0;
   font-size: 14px;
-  color: #0f141a;
+  color: var(--aws-text);
   white-space: nowrap;
 }
 
@@ -68,7 +68,7 @@
   padding: 0 12px;
   border: 1px solid #7aa116;
   border-radius: 16px;
-  background: #ffffff;
+  background: var(--aws-surface);
   color: #037f0c;
   font-size: 13px;
   cursor: pointer;
@@ -78,6 +78,19 @@
 .ttlPillActive {
   background: #f2f8e8;
   border-color: #037f0c;
+}
+
+:global(html[data-visual-mode="dark"]) .ttlPill {
+  color: #69ae34;
+  border-color: #69ae34;
+  background: transparent;
+}
+
+:global(html[data-visual-mode="dark"]) .ttlPill:hover,
+:global(html[data-visual-mode="dark"]) .ttlPillActive {
+  background: rgba(105, 174, 52, 0.16);
+  border-color: #69ae34;
+  color: #8fca61;
 }
 
 .addAnotherRow {

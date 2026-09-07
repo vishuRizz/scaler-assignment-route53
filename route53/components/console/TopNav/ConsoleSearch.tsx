@@ -156,14 +156,20 @@ export const ConsoleSearch = forwardRef<ConsoleSearchHandle, ConsoleSearchProps>
 
   useEffect(() => {
     function onKey(event: globalThis.KeyboardEvent) {
-      if ((event.metaKey || event.altKey) && event.key.toLowerCase() === "s") {
-        event.preventDefault();
+      // Use event.code — on macOS Option+S emits key "ß", not "s".
+      const isS = event.code === "KeyS" || event.key.toLowerCase() === "s";
+      if (!(event.metaKey || event.altKey) || !isS) return;
+      if (event.repeat || event.isComposing) return;
+      event.preventDefault();
+      event.stopPropagation();
+      setOpen(true);
+      requestAnimationFrame(() => {
         inputRef.current?.focus();
-        setOpen(true);
-      }
+        inputRef.current?.select();
+      });
     }
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener("keydown", onKey, true);
+    return () => document.removeEventListener("keydown", onKey, true);
   }, []);
 
   useEffect(() => {

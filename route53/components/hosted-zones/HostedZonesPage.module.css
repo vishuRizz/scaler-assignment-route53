@@ -22,7 +22,7 @@
 .infoText {
   font-size: 12px;
   line-height: 1.4;
-  color: #5f6b7a;
+  color: var(--aws-text-secondary);
 }
 
 .selectionBar {
@@ -36,15 +36,15 @@
   justify-content: space-between;
   min-height: 44px;
   padding: 0 16px;
-  background: #ffffff;
-  border-top: 1px solid #e9ebed;
+  background: var(--aws-surface);
+  border-top: 1px solid var(--aws-border);
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
   font-size: 14px;
-  color: #0f141a;
+  color: var(--aws-text);
 }
 
 .selectionChevron {
-  color: #5f6b7a;
+  color: var(--aws-text-secondary);
 }
 
 @media (max-width: 767px) {

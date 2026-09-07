@@ -1,13 +1,12 @@
 "use client";
 
-import Box from "@cloudscape-design/components/box";
 import Button from "@cloudscape-design/components/button";
-import Container from "@cloudscape-design/components/container";
 import Header from "@cloudscape-design/components/header";
+import Link from "@cloudscape-design/components/link";
 import SpaceBetween from "@cloudscape-design/components/space-between";
-import StatusIndicator from "@cloudscape-design/components/status-indicator";
 import { useRouter } from "next/navigation";
 import { ConsolePage } from "@/components/console/ConsolePage";
+import { awsPrimaryButtonStyle } from "@/lib/constants/button-styles";
 import styles from "./ComingSoonPage.module.css";
 
 export type ComingSoonPageProps = {
@@ -16,9 +15,39 @@ export type ComingSoonPageProps = {
   breadcrumbItems: { text: string; href: string }[];
 };
 
+function ComingSoonGlyph() {
+  return (
+    <svg
+      className={styles.glyph}
+      width="72"
+      height="72"
+      viewBox="0 0 72 72"
+      fill="none"
+      aria-hidden
+    >
+      <rect
+        x="8"
+        y="8"
+        width="56"
+        height="56"
+        rx="12"
+        stroke="currentColor"
+        strokeWidth="2"
+        opacity="0.35"
+      />
+      <path
+        d="M36 22v18M36 48h.02"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <circle cx="36" cy="36" r="26" stroke="currentColor" strokeWidth="1.5" opacity="0.2" />
+    </svg>
+  );
+}
+
 /**
- * Placeholder for Route 53 sections that are out of assignment scope.
- * Keeps console chrome + nav feel while marking the feature as unavailable.
+ * Placeholder for Route 53 sections outside assignment scope.
  */
 export function ComingSoonPage({
   title,
@@ -30,34 +59,55 @@ export function ComingSoonPage({
   return (
     <ConsolePage breadcrumbItems={breadcrumbItems}>
       <div className={styles.page}>
-        <Header variant="h1">{title}</Header>
+        <div className={styles.titleRow}>
+          <Header variant="h1">{title}</Header>
+          <Link href="#" variant="info" fontSize="body-s">
+            Info
+          </Link>
+        </div>
 
-        <Container>
-          <div className={styles.body}>
-            <SpaceBetween size="m" alignItems="center">
-              <StatusIndicator type="info">Coming soon</StatusIndicator>
-              <Box variant="h2" textAlign="center">
-                This feature isn&apos;t available in the clone yet
-              </Box>
-              <Box
-                variant="p"
-                color="text-body-secondary"
-                textAlign="center"
-              >
-                <span className={styles.copy}>{description}</span> In the real
-                AWS console this page manages live Route 53 resources. Here
-                it&apos;s a placeholder so navigation matches the product
-                experience.
-              </Box>
-              <Button
-                variant="primary"
-                onClick={() => router.push("/hosted-zones")}
-              >
-                Go to Hosted zones
-              </Button>
-            </SpaceBetween>
+        <section className={styles.panel} aria-labelledby="coming-soon-heading">
+          <div className={styles.panelInner}>
+            <div className={styles.iconWrap}>
+              <ComingSoonGlyph />
+            </div>
+
+            <span className={styles.badge}>Coming soon</span>
+
+            <h2 id="coming-soon-heading" className={styles.heading}>
+              {title} isn&apos;t available in this clone
+            </h2>
+
+            <p className={styles.copy}>{description}</p>
+
+            <p className={styles.note}>
+              Navigation matches the AWS Route 53 console so the product layout
+              stays familiar. Core assignment features — hosted zones and DNS
+              records — are fully implemented.
+            </p>
+
+            <ul className={styles.hints}>
+              <li>Manage domains and records under Hosted zones</li>
+              <li>Review account summary on the Dashboard</li>
+              <li>Use search (Option+S) to jump between console pages</li>
+            </ul>
+
+            <div className={styles.actions}>
+              <SpaceBetween direction="horizontal" size="xs">
+                <Button
+                  variant="primary"
+                  onClick={() => router.push("/hosted-zones")}
+                  style={awsPrimaryButtonStyle}
+                >
+                  Go to Hosted zones
+                </Button>
+                <Button onClick={() => router.push("/dashboard")}>
+                  Open Dashboard
+                </Button>
+              </SpaceBetween>
+            </div>
           </div>
-        </Container>
+        </section>
       </div>
     </ConsolePage>
   );

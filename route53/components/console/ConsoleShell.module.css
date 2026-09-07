@@ -121,6 +121,8 @@
   align-items: center;
   justify-content: center;
   min-height: 240px;
+  width: 100%;
+  background: var(--aws-surface);
   color: var(--aws-text-secondary);
   font-size: 14px;
 }
