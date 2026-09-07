@@ -8,7 +8,11 @@ export const metadata: Metadata = {
   description:
     "A reliable and cost-effective way to route end users to Internet applications",
   icons: {
-    icon: [{ url: "/favicon.ico", sizes: "any" }],
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/assets/route53-icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
     shortcut: "/favicon.ico",
   },
 };
